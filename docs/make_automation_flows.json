@@ -1,0 +1,390 @@
+{
+  "_description": "Make.com (旧Integromat) 自動化シナリオ設計 - AI人材マッチングプラットフォーム",
+  "_version": "1.0",
+  "_note": "Make.comにインポート可能な設計JSON。各scenarioをMake.comで個別にセットアップする。",
+
+  "scenarios": [
+    {
+      "id": "scenario_1_new_engineer_welcome",
+      "name": "新規エンジニア登録 → ウェルカムフロー",
+      "trigger": {
+        "type": "webhook",
+        "url": "https://hook.make.com/{your_webhook_id}",
+        "method": "POST",
+        "description": "FastAPI /api/v1/engineers/ POST成功時にWebhookで通知",
+        "payload_schema": {
+          "engineer_id": "uuid",
+          "name": "string",
+          "email": "string",
+          "experience_level": "string",
+          "ai_specialties": ["string"]
+        }
+      },
+      "modules": [
+        {
+          "order": 1,
+          "type": "webhook_trigger",
+          "name": "エンジニア登録Webhook受信"
+        },
+        {
+          "order": 2,
+          "type": "email",
+          "service": "Gmail / SendGrid",
+          "name": "ウェルカムメール送信",
+          "config": {
+            "to": "{{engineer.email}}",
+            "subject": "AI Matching Platform へようこそ！",
+            "body_template": "{{engineer.name}}様\n\nご登録ありがとうございます。\nあなたの専門領域（{{ai_specialties}}）にマッチする求人が見つかり次第、\nすぐにご連絡いたします。\n\n▼ 無料市場価値診断はこちら\nhttps://your-domain.com/diagnosis\n\nAI Matching Platform"
+          }
+        },
+        {
+          "order": 3,
+          "type": "discord",
+          "name": "Discord #new-engineers チャンネル通知",
+          "config": {
+            "channel": "#new-engineers",
+            "message": "👤 新規登録: {{name}} ({{experience_level}}) | {{ai_specialties}}"
+          }
+        },
+        {
+          "order": 4,
+          "type": "google_sheets",
+          "name": "エンジニアリストに追記",
+          "config": {
+            "spreadsheet_id": "{your_spreadsheet_id}",
+            "sheet_name": "エンジニア一覧",
+            "row": ["{{engineer_id}}", "{{name}}", "{{email}}", "{{experience_level}}", "{{ai_specialties}}", "{{registered_at}}"]
+          }
+        },
+        {
+          "order": 5,
+          "type": "http_request",
+          "name": "自動マッチング実行",
+          "config": {
+            "method": "POST",
+            "url": "http://your-api.com/api/v1/matching/run",
+            "headers": {"Content-Type": "application/json"},
+            "body": {"min_score": 60},
+            "description": "新規登録エンジニアに対してマッチングを即座に実行"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "scenario_2_new_company_onboarding",
+      "name": "新規企業登録 → オンボーディング",
+      "trigger": {
+        "type": "webhook",
+        "url": "https://hook.make.com/{your_webhook_id}",
+        "method": "POST",
+        "payload_schema": {
+          "company_id": "uuid",
+          "name": "string",
+          "contact_name": "string",
+          "contact_email": "string",
+          "industry": "string"
+        }
+      },
+      "modules": [
+        {
+          "order": 1,
+          "type": "webhook_trigger",
+          "name": "企業登録Webhook受信"
+        },
+        {
+          "order": 2,
+          "type": "email",
+          "service": "Gmail / SendGrid",
+          "name": "オンボーディングメール送信",
+          "config": {
+            "to": "{{contact_email}}",
+            "subject": "AI Matching Platform | 企業アカウント開設完了",
+            "body_template": "{{contact_name}}様\n\n{{company_name}}様のアカウントが開設されました。\n\n▼ 次のステップ\n1. 求人案件を登録 → https://your-domain.com/company\n2. AIが候補者を自動マッチング\n3. Discord通知で即確認\n\n成功報酬型：採用決定まで費用は一切かかりません。"
+          }
+        },
+        {
+          "order": 3,
+          "type": "discord",
+          "name": "Discord #new-companies チャンネル通知",
+          "config": {
+            "channel": "#new-companies",
+            "message": "🏢 新規企業: {{name}} ({{industry}}) | 担当: {{contact_name}}"
+          }
+        },
+        {
+          "order": 4,
+          "type": "slack",
+          "name": "Slack #sales チャンネル通知（営業チーム向け）",
+          "config": {
+            "channel": "#sales",
+            "message": "🆕 新規リード: {{name}} ({{industry}})\n担当: {{contact_name}} <{{contact_email}}>\n→ 24時間以内にフォローアップ必須"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "scenario_3_scheduled_matching",
+      "name": "定期マッチング実行（毎日9:00）",
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 9 * * *",
+        "timezone": "Asia/Tokyo"
+      },
+      "modules": [
+        {
+          "order": 1,
+          "type": "schedule_trigger",
+          "name": "毎朝9:00トリガー"
+        },
+        {
+          "order": 2,
+          "type": "http_request",
+          "name": "マッチングエンジン実行",
+          "config": {
+            "method": "POST",
+            "url": "http://your-api.com/api/v1/matching/run",
+            "body": {"min_score": 50}
+          }
+        },
+        {
+          "order": 3,
+          "type": "router",
+          "name": "新規マッチ有無で分岐",
+          "routes": [
+            {
+              "condition": "{{new_matches_count}} > 0",
+              "modules": [
+                {
+                  "order": 4,
+                  "type": "discord",
+                  "name": "新規マッチ通知",
+                  "config": {
+                    "channel": "#matching-results",
+                    "message": "📊 本日のマッチング結果: {{new_matches_count}}件の新規マッチが見つかりました"
+                  }
+                }
+              ]
+            },
+            {
+              "condition": "{{new_matches_count}} == 0",
+              "modules": []
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "scenario_4_daily_executive_report",
+      "name": "日次3択レポート配信（代表向け）",
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 8 * * 1-5",
+        "timezone": "Asia/Tokyo",
+        "description": "平日朝8:00にレポート生成"
+      },
+      "modules": [
+        {
+          "order": 1,
+          "type": "schedule_trigger",
+          "name": "平日朝8:00トリガー"
+        },
+        {
+          "order": 2,
+          "type": "http_request",
+          "name": "日次レポート取得",
+          "config": {
+            "method": "GET",
+            "url": "http://your-api.com/api/v1/reports/daily"
+          }
+        },
+        {
+          "order": 3,
+          "type": "discord",
+          "name": "代表DMに3択レポート送信",
+          "config": {
+            "channel": "DM:代表",
+            "embed": {
+              "title": "📋 日次レポート {{report_date}}",
+              "fields": [
+                {"name": "登録エンジニア", "value": "{{kpi.registered_engineers}}", "inline": true},
+                {"name": "アクティブ求人", "value": "{{kpi.active_postings}}", "inline": true},
+                {"name": "保留中マッチ", "value": "{{kpi.pending_matches}}", "inline": true},
+                {"name": "累計売上", "value": "¥{{kpi.total_revenue_jpy}}", "inline": true},
+                {"name": "A案（攻め）", "value": "{{options[0].label}}"},
+                {"name": "B案（守り）", "value": "{{options[1].label}}"},
+                {"name": "C案（現状維持）", "value": "{{options[2].label}}"}
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "scenario_5_match_status_followup",
+      "name": "マッチング自動フォローアップ",
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 10 * * *",
+        "timezone": "Asia/Tokyo"
+      },
+      "modules": [
+        {
+          "order": 1,
+          "type": "schedule_trigger",
+          "name": "毎朝10:00トリガー"
+        },
+        {
+          "order": 2,
+          "type": "http_request",
+          "name": "3日以上保留のマッチ取得",
+          "config": {
+            "method": "GET",
+            "url": "http://your-api.com/api/v1/matches/?status=proposed&limit=50"
+          }
+        },
+        {
+          "order": 3,
+          "type": "iterator",
+          "name": "各マッチをループ処理",
+          "filter": "proposed_at が 3日以上前",
+          "modules": [
+            {
+              "order": 4,
+              "type": "email",
+              "name": "企業フォローアップメール",
+              "config": {
+                "to": "{{company.contact_email}}",
+                "subject": "【ご確認】AI人材候補のご提案について",
+                "body_template": "{{company.contact_name}}様\n\n先日ご提案した候補者（スコア: {{ai_score}}点）について、ご検討状況はいかがでしょうか。\n\n候補者は他社からも並行してオファーを受けている状況です。\nぜひお早めにご確認いただけますと幸いです。\n\n▼ ダッシュボードで確認\nhttps://your-domain.com/company"
+              }
+            },
+            {
+              "order": 5,
+              "type": "discord",
+              "name": "フォローアップ実行ログ",
+              "config": {
+                "channel": "#followup-log",
+                "message": "📧 フォローアップ送信: {{company.name}} ← Match {{match_id}} ({{ai_score}}点, {{days_pending}}日保留)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "scenario_6_stripe_payment_notification",
+      "name": "Stripe決済完了 → 全体通知",
+      "trigger": {
+        "type": "webhook",
+        "url": "https://hook.make.com/{your_webhook_id}",
+        "description": "Stripe Webhookから checkout.session.completed を受信"
+      },
+      "modules": [
+        {
+          "order": 1,
+          "type": "webhook_trigger",
+          "name": "Stripe Webhook受信"
+        },
+        {
+          "order": 2,
+          "type": "discord",
+          "name": "Discord #revenue チャンネル通知",
+          "config": {
+            "channel": "#revenue",
+            "embed": {
+              "title": "💰 決済完了",
+              "color": "green",
+              "fields": [
+                {"name": "金額", "value": "¥{{amount}}", "inline": true},
+                {"name": "種別", "value": "{{payment_type}}", "inline": true},
+                {"name": "企業", "value": "{{company_name}}", "inline": true}
+              ]
+            }
+          }
+        },
+        {
+          "order": 3,
+          "type": "google_sheets",
+          "name": "売上台帳に追記",
+          "config": {
+            "spreadsheet_id": "{your_spreadsheet_id}",
+            "sheet_name": "売上",
+            "row": ["{{payment_date}}", "{{company_name}}", "{{amount}}", "{{payment_type}}", "{{match_id}}"]
+          }
+        },
+        {
+          "order": 4,
+          "type": "email",
+          "name": "代表に着金通知",
+          "config": {
+            "to": "ceo@your-domain.com",
+            "subject": "💰 着金通知: ¥{{amount}} ({{company_name}})",
+            "body_template": "着金がありました。\n\n企業: {{company_name}}\n金額: ¥{{amount}}\n種別: {{payment_type}}\n\n累計売上は管理画面で確認できます。"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "scenario_7_knowledge_loop_weekly",
+      "name": "週次 Knowledge-Loop 分析",
+      "trigger": {
+        "type": "schedule",
+        "cron": "0 9 * * 1",
+        "timezone": "Asia/Tokyo",
+        "description": "毎週月曜9:00"
+      },
+      "modules": [
+        {
+          "order": 1,
+          "type": "schedule_trigger",
+          "name": "月曜朝9:00トリガー"
+        },
+        {
+          "order": 2,
+          "type": "http_request",
+          "name": "失注分析レポート取得",
+          "config": {
+            "method": "GET",
+            "url": "http://your-api.com/api/v1/reports/knowledge-loop?days=7"
+          }
+        },
+        {
+          "order": 3,
+          "type": "discord",
+          "name": "週次失注分析をDiscord配信",
+          "config": {
+            "channel": "#analytics",
+            "embed": {
+              "title": "📈 週次 Knowledge-Loop レポート",
+              "fields": [
+                {"name": "今週の失注数", "value": "{{total_lost}}"},
+                {"name": "最多懸念点", "value": "{{patterns[0].label}} ({{patterns[0].rate}}%)"},
+                {"name": "重み調整提案", "value": "{{weight_adjustments}}"},
+                {"name": "切り返しトーク更新", "value": "{{counter_talk_suggestions.length}}件"}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+
+  "webhook_integration_guide": {
+    "fastapi_side": {
+      "description": "FastAPIの各エンドポイントにMake.com Webhookへの通知を追加する方法",
+      "example_code": "import httpx\n\nMAKE_WEBHOOK_URL = 'https://hook.make.com/{your_webhook_id}'\n\nasync def notify_make(event_type: str, data: dict):\n    async with httpx.AsyncClient() as client:\n        await client.post(MAKE_WEBHOOK_URL, json={'event': event_type, **data})"
+    },
+    "make_side": {
+      "step_1": "Make.comで新規シナリオを作成",
+      "step_2": "トリガーモジュールとしてWebhookを追加",
+      "step_3": "生成されたWebhook URLをFastAPIの環境変数に設定",
+      "step_4": "後続モジュール（Discord, Email, Sheets等）を接続"
+    }
+  }
+}
