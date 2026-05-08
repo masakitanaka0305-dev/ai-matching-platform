@@ -39,10 +39,7 @@ CH_HUNTER = int(os.getenv("CH_HUNTER", "0"))
 CH_DASHBOARD = int(os.getenv("CH_DASHBOARD", "0"))
 CH_APPROVAL = int(os.getenv("CH_APPROVAL", "0"))
 CH_AUTOMATION_LOG = int(os.getenv("CH_AUTOMATION_LOG", "0"))
-CH_MATCHING = int(os.getenv("CH_MATCHING", "0"))
-CH_REPORT = int(os.getenv("CH_REPORT", "0"))
-CH_PAYMENT = int(os.getenv("CH_PAYMENT", "0"))
-CH_ANALYSIS = int(os.getenv("CH_ANALYSIS", "0"))
+# 旧チャンネルは廃止。全通知は AUTONOMOUS_OPERATIONS カテゴリに統合。
 
 JST = timezone(timedelta(hours=9))
 

@@ -1,10 +1,10 @@
 from __future__ import annotations
 """
-定期タスクスケジューラ
+定期タスクスケジューラ（非推奨 — 使用しない）
 
-- 毎日9:00 JST: マッチングエンジン自動実行
-- 毎日9:30 JST: 日次レポートをDiscord通知
-- 毎週月曜 10:00 JST: Knowledge-Loop分析
+全スケジュールタスクは discord-bot/autonomous_bot.py に統合済み。
+main.py から呼び出されないため、このファイルは参照用として残す。
+2重実行を防ぐため、絶対にmain.pyから start() を呼ばないこと。
 """
 import asyncio
 import threading

@@ -10,12 +10,9 @@ class Settings(BaseSettings):
     # Database
     database_url: str = "postgresql://localhost:5432/ai_matching"
 
-    # Discord
+    # Discord（通知はautonomous_botに一本化。バックエンドはWebhook起点の即時通知のみ）
     discord_bot_token: str = ""
-    discord_notification_channel_id: str = ""  # マッチング通知（デフォルト）
-    discord_report_channel_id: str = ""  # 日次レポート
-    discord_payment_channel_id: str = ""  # 決済通知
-    discord_analysis_channel_id: str = ""  # 失注分析
+    discord_notification_channel_id: str = ""  # Stripe決済完了等の即時通知先
     discord_guild_id: str = ""
 
     # Stripe

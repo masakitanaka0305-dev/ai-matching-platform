@@ -16,11 +16,9 @@ from .models.database import engine, Base
 async def lifespan(app: FastAPI):
     # 起動時にテーブル自動作成
     Base.metadata.create_all(bind=engine)
-    # 定期タスクスケジューラ開始
-    from .services.scheduler import scheduler
-    scheduler.start()
+    # NOTE: 定期タスクは autonomous_bot.py (Discord Bot) に一本化済み。
+    # backend側のscheduler.pyは使用しない（2重実行防止）。
     yield
-    scheduler.stop()
 
 
 app = FastAPI(
