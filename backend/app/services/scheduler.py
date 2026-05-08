@@ -11,6 +11,7 @@ import threading
 import time
 from datetime import datetime, timedelta, timezone
 
+from ..core.config import settings
 from ..models.database import SessionLocal
 from .scoring_engine import matching_service
 from .executive_report import executive_report
@@ -104,7 +105,8 @@ class Scheduler:
                     message += f"  - {action}\n"
                 message += f"  効果: {opt.get('estimated_impact', '')}\n\n"
 
-            asyncio.run(notifier._send_to_channel(message))
+            report_ch = settings.discord_report_channel_id or None
+            asyncio.run(notifier._send_to_channel(message, channel_id=report_ch))
             print(f"[Scheduler] Daily report sent to Discord")
         except Exception as e:
             print(f"[Scheduler] Daily report error: {e}")
@@ -121,7 +123,8 @@ class Scheduler:
                 message = "**週次 Knowledge-Loop分析**\n"
                 for p in patterns[:5]:
                     message += f"- {p['label']}: {p['count']}件 ({p.get('pct', 0):.0f}%)\n"
-                asyncio.run(notifier._send_to_channel(message))
+                analysis_ch = settings.discord_analysis_channel_id or None
+                asyncio.run(notifier._send_to_channel(message, channel_id=analysis_ch))
 
             print(f"[Scheduler] Knowledge-loop analysis complete")
         except Exception as e:

@@ -12,7 +12,10 @@ class Settings(BaseSettings):
 
     # Discord
     discord_bot_token: str = ""
-    discord_notification_channel_id: str = ""
+    discord_notification_channel_id: str = ""  # マッチング通知（デフォルト）
+    discord_report_channel_id: str = ""  # 日次レポート
+    discord_payment_channel_id: str = ""  # 決済通知
+    discord_analysis_channel_id: str = ""  # 失注分析
     discord_guild_id: str = ""
 
     # Stripe
