@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { postingApi, type JobPostingCreate } from "@/lib/api";
 
@@ -8,6 +8,14 @@ const AI_DOMAINS = ["NLP", "Computer Vision", "LLM", "MLOps", "Recommendation", 
 const TECH_STACKS = ["PyTorch", "TensorFlow", "JAX", "LangChain", "Hugging Face", "scikit-learn", "OpenCV", "Ray", "Kubernetes", "AWS SageMaker"];
 
 export default function NewPostingPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-12">読み込み中...</div>}>
+      <NewPostingForm />
+    </Suspense>
+  );
+}
+
+function NewPostingForm() {
   const searchParams = useSearchParams();
   const companyId = searchParams.get("company_id") || "";
 
