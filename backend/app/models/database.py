@@ -12,6 +12,10 @@ DATABASE_URL = os.getenv(
     f"sqlite:///{Path(__file__).resolve().parent.parent.parent / 'ai_matching.db'}",
 )
 
+# Railway等で postgres:// が渡される場合、SQLAlchemy 2.x 用に変換
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 connect_args = {}
 if DATABASE_URL.startswith("sqlite"):
     connect_args["check_same_thread"] = False
