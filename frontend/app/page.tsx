@@ -1,26 +1,26 @@
 export default function Home() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-10 sm:space-y-12">
       {/* Hero */}
-      <section className="text-center py-16">
-        <h1 className="text-4xl font-bold mb-4">
+      <section className="text-center py-10 sm:py-16">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
           AI人材 × 企業を
           <span className="text-indigo-600">最適マッチング</span>
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
           AIエンジニア特化のスコアリングエンジンが、
           スキル・経験・志向性を多角的に分析し、最適な出会いを創出します。
         </p>
-        <div className="mt-8 flex gap-4 justify-center">
+        <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <a
             href="/engineer"
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700"
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 text-center"
           >
             エンジニア登録
           </a>
           <a
             href="/diagnosis"
-            className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg font-medium hover:bg-indigo-50"
+            className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg font-medium hover:bg-indigo-50 text-center"
           >
             無料で市場価値診断
           </a>
@@ -28,8 +28,8 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="grid md:grid-cols-3 gap-8">
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+      <section className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        <div className="bg-white p-5 sm:p-6 rounded-xl shadow-sm border">
           <div className="text-3xl mb-3">🎯</div>
           <h3 className="text-lg font-bold mb-2">AIスコアリング</h3>
           <p className="text-gray-600 text-sm">
@@ -37,7 +37,7 @@ export default function Home() {
             100点満点でスコアリング。ノイズのないマッチングを実現。
           </p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+        <div className="bg-white p-5 sm:p-6 rounded-xl shadow-sm border">
           <div className="text-3xl mb-3">📊</div>
           <h3 className="text-lg font-bold mb-2">無料市場価値診断</h3>
           <p className="text-gray-600 text-sm">
@@ -45,7 +45,7 @@ export default function Home() {
             GitHub分析と業界データを組み合わせた詳細レポート。
           </p>
         </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
+        <div className="bg-white p-5 sm:p-6 rounded-xl shadow-sm border sm:col-span-2 md:col-span-1">
           <div className="text-3xl mb-3">💬</div>
           <h3 className="text-lg font-bold mb-2">Discord連携</h3>
           <p className="text-gray-600 text-sm">
@@ -56,9 +56,9 @@ export default function Home() {
       </section>
 
       {/* For Companies */}
-      <section className="bg-white p-8 rounded-xl shadow-sm border">
-        <h2 className="text-2xl font-bold mb-4">企業の方へ</h2>
-        <div className="grid md:grid-cols-2 gap-6">
+      <section className="bg-white p-5 sm:p-8 rounded-xl shadow-sm border">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">企業の方へ</h2>
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <h4 className="font-bold mb-2">成功報酬型</h4>
             <p className="text-gray-600 text-sm">
@@ -76,7 +76,7 @@ export default function Home() {
         </div>
         <a
           href="/company"
-          className="inline-block mt-6 px-6 py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600"
+          className="inline-block mt-6 px-6 py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 w-full sm:w-auto text-center"
         >
           企業ダッシュボードへ
         </a>

@@ -49,16 +49,16 @@ export default function CompanyRegisterPage() {
         <p className="text-gray-600 mb-6">
           求人を作成し、AIマッチングエンジンがAI人材をご紹介します。
         </p>
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <a
             href="/company"
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium"
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium text-center"
           >
             ダッシュボードへ
           </a>
           <a
             href={`/company/postings/new?company_id=${companyId}`}
-            className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg font-medium"
+            className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg font-medium text-center"
           >
             求人を作成する
           </a>
@@ -75,7 +75,7 @@ export default function CompanyRegisterPage() {
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">{error}</div>
         )}
 
-        <div className="bg-white p-6 rounded-xl border space-y-4">
+        <div className="bg-white p-4 sm:p-6 rounded-xl border space-y-4">
           <h2 className="font-bold text-lg">企業情報</h2>
           <div>
             <label className="block text-sm font-medium mb-1">企業名 *</label>

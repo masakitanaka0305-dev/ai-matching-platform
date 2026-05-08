@@ -82,7 +82,7 @@ function NewPostingForm() {
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">{error}</div>
         )}
 
-        <div className="bg-white p-6 rounded-xl border space-y-4">
+        <div className="bg-white p-4 sm:p-6 rounded-xl border space-y-4">
           <h2 className="font-bold text-lg">求人情報</h2>
 
           {!companyId && (
@@ -190,7 +190,7 @@ function NewPostingForm() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border space-y-4">
+        <div className="bg-white p-4 sm:p-6 rounded-xl border space-y-4">
           <h2 className="font-bold text-lg">技術要件</h2>
 
           <div>

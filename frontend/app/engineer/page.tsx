@@ -77,7 +77,7 @@ export default function EngineerRegistration() {
         )}
 
         {/* 基本情報 */}
-        <div className="bg-white p-6 rounded-xl border space-y-4">
+        <div className="bg-white p-4 sm:p-6 rounded-xl border space-y-4">
           <h2 className="font-bold text-lg">基本情報</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
@@ -126,7 +126,7 @@ export default function EngineerRegistration() {
         </div>
 
         {/* 経験 */}
-        <div className="bg-white p-6 rounded-xl border space-y-4">
+        <div className="bg-white p-4 sm:p-6 rounded-xl border space-y-4">
           <h2 className="font-bold text-lg">経験・スキル</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
@@ -196,7 +196,7 @@ export default function EngineerRegistration() {
         </div>
 
         {/* 希望条件 */}
-        <div className="bg-white p-6 rounded-xl border space-y-4">
+        <div className="bg-white p-4 sm:p-6 rounded-xl border space-y-4">
           <h2 className="font-bold text-lg">希望条件</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div>

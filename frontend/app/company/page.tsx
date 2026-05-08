@@ -71,11 +71,11 @@ export default function CompanyDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">企業ダッシュボード</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold">企業ダッシュボード</h1>
         <a
           href="/company/register"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 text-center"
         >
           新規企業登録
         </a>
@@ -129,10 +129,10 @@ export default function CompanyDashboard() {
               {matches.map((m) => {
                 const st = STATUS_LABELS[m.status] || { label: m.status, color: "bg-gray-100" };
                 return (
-                  <div key={m.id} className="bg-white p-6 rounded-xl border">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <div className="flex items-center gap-3 mb-1">
+                  <div key={m.id} className="bg-white p-4 sm:p-6 rounded-xl border">
+                    <div className="flex items-start justify-between gap-3 mb-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
                           <span className={`px-2 py-0.5 rounded text-xs font-medium ${st.color}`}>
                             {st.label}
                           </span>
@@ -142,8 +142,8 @@ export default function CompanyDashboard() {
                         </div>
                         <div className="text-sm text-gray-500">ID: {m.id.slice(0, 8)}...</div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-3xl font-bold text-indigo-600">{m.ai_score}</div>
+                      <div className="text-right shrink-0">
+                        <div className="text-2xl sm:text-3xl font-bold text-indigo-600">{m.ai_score}</div>
                         <div className="text-xs text-gray-500">AIスコア</div>
                       </div>
                     </div>
@@ -155,22 +155,22 @@ export default function CompanyDashboard() {
                     )}
 
                     {m.status === "proposed" && (
-                      <div className="flex gap-3">
+                      <div className="flex flex-wrap gap-2 sm:gap-3">
                         <button
                           onClick={() => handleAction(m.id, "company_reviewed")}
-                          className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+                          className="flex-1 sm:flex-none px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
                         >
-                          確認済みにする
+                          確認済み
                         </button>
                         <button
                           onClick={() => handleAction(m.id, "accepted")}
-                          className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
+                          className="flex-1 sm:flex-none px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
                         >
                           承認
                         </button>
                         <button
                           onClick={() => handleAction(m.id, "rejected")}
-                          className="px-4 py-2 border border-red-300 text-red-600 rounded-lg text-sm font-medium hover:bg-red-50"
+                          className="flex-1 sm:flex-none px-4 py-2 border border-red-300 text-red-600 rounded-lg text-sm font-medium hover:bg-red-50"
                         >
                           却下
                         </button>
@@ -205,8 +205,8 @@ export default function CompanyDashboard() {
           ) : (
             <div className="space-y-4">
               {postings.map((p) => (
-                <div key={p.id} className="bg-white p-6 rounded-xl border">
-                  <div className="flex items-start justify-between">
+                <div key={p.id} className="bg-white p-4 sm:p-6 rounded-xl border">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span

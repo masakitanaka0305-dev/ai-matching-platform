@@ -67,13 +67,13 @@ export default function AdminPage() {
       )}
 
       {/* マッチング実行 */}
-      <div className="bg-white p-6 rounded-xl border">
+      <div className="bg-white p-4 sm:p-6 rounded-xl border">
         <h2 className="text-lg font-bold mb-4">マッチングエンジン実行</h2>
         <p className="text-sm text-gray-600 mb-4">
           全アクティブ求人 x 転職可能エンジニアをスコアリングし、
           閾値以上のペアを自動マッチングします。
         </p>
-        <div className="flex items-end gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">最低スコア閾値</label>
             <input
@@ -82,13 +82,13 @@ export default function AdminPage() {
               max={100}
               value={minScore}
               onChange={(e) => setMinScore(Number(e.target.value))}
-              className="border rounded-lg px-3 py-2 w-24"
+              className="border rounded-lg px-3 py-2 w-full sm:w-24"
             />
           </div>
           <button
             onClick={runMatching}
             disabled={running}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50"
+            className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 w-full sm:w-auto"
           >
             {running ? "実行中..." : "マッチング実行"}
           </button>
@@ -103,7 +103,7 @@ export default function AdminPage() {
       </div>
 
       {/* 日次レポート（3択） */}
-      <div className="bg-white p-6 rounded-xl border">
+      <div className="bg-white p-4 sm:p-6 rounded-xl border">
         <h2 className="text-lg font-bold mb-4">日次3択レポート（代表向け）</h2>
         <p className="text-sm text-gray-600 mb-4">
           KPI集計と失注分析に基づき、A（攻め）/ B（守り）/ C（現状維持）の3択を生成します。
@@ -121,7 +121,7 @@ export default function AdminPage() {
             <div className="text-sm text-gray-500">{dailyReport.report_date}</div>
 
             {/* KPI */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {Object.entries(dailyReport.kpi).map(([key, val]) => (
                 <div key={key} className="bg-gray-50 p-3 rounded-lg text-center">
                   <div className="text-xl font-bold">{typeof val === "number" ? val.toLocaleString() : val}</div>
@@ -166,12 +166,12 @@ export default function AdminPage() {
       </div>
 
       {/* Knowledge-Loop分析 */}
-      <div className="bg-white p-6 rounded-xl border">
+      <div className="bg-white p-4 sm:p-6 rounded-xl border">
         <h2 className="text-lg font-bold mb-4">Knowledge-Loop（失注分析）</h2>
         <p className="text-sm text-gray-600 mb-4">
           却下・辞退データから「なぜマッチしなかったか」を分析し、改善策を提示します。
         </p>
-        <div className="flex items-end gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">分析期間（日）</label>
             <input
@@ -180,13 +180,13 @@ export default function AdminPage() {
               max={365}
               value={klDays}
               onChange={(e) => setKlDays(Number(e.target.value))}
-              className="border rounded-lg px-3 py-2 w-24"
+              className="border rounded-lg px-3 py-2 w-full sm:w-24"
             />
           </div>
           <button
             onClick={fetchKnowledgeLoop}
             disabled={klLoading}
-            className="px-6 py-2 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 disabled:opacity-50"
+            className="px-6 py-2 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 disabled:opacity-50 w-full sm:w-auto"
           >
             {klLoading ? "分析中..." : "分析実行"}
           </button>
@@ -203,16 +203,18 @@ export default function AdminPage() {
                 <h3 className="text-sm font-bold mb-2">失注パターン</h3>
                 <div className="space-y-2">
                   {klReport.patterns.map((p, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className="w-32 text-sm truncate">{p.label}</div>
-                      <div className="flex-1 bg-gray-200 rounded-full h-4">
-                        <div
-                          className="bg-red-500 h-4 rounded-full"
-                          style={{ width: `${Math.min(p.pct, 100)}%` }}
-                        />
-                      </div>
-                      <div className="text-sm text-gray-600 w-20 text-right">
-                        {p.count}件 ({p.pct.toFixed(0)}%)
+                    <div key={i} className="space-y-1 sm:space-y-0 sm:flex sm:items-center sm:gap-3">
+                      <div className="text-sm truncate sm:w-32">{p.label}</div>
+                      <div className="flex items-center gap-2 flex-1">
+                        <div className="flex-1 bg-gray-200 rounded-full h-4">
+                          <div
+                            className="bg-red-500 h-4 rounded-full"
+                            style={{ width: `${Math.min(p.pct, 100)}%` }}
+                          />
+                        </div>
+                        <div className="text-sm text-gray-600 whitespace-nowrap">
+                          {p.count}件 ({p.pct.toFixed(0)}%)
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -238,7 +240,7 @@ export default function AdminPage() {
       </div>
 
       {/* API情報 */}
-      <div className="bg-white p-6 rounded-xl border">
+      <div className="bg-white p-4 sm:p-6 rounded-xl border overflow-x-auto">
         <h2 className="text-lg font-bold mb-4">API エンドポイント</h2>
         <div className="space-y-2 font-mono text-sm">
           {[

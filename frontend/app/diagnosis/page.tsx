@@ -143,9 +143,9 @@ export default function DiagnosisPage() {
       <div className="max-w-2xl mx-auto space-y-6">
         <h1 className="text-2xl font-bold">AI市場価値診断 結果</h1>
 
-        <div className="bg-white p-8 rounded-xl border text-center">
-          <div className="text-6xl font-bold text-indigo-600 mb-2">{result.score}</div>
-          <div className="text-2xl font-bold mb-1">ランク {result.level}</div>
+        <div className="bg-white p-5 sm:p-8 rounded-xl border text-center">
+          <div className="text-4xl sm:text-6xl font-bold text-indigo-600 mb-2">{result.score}</div>
+          <div className="text-xl sm:text-2xl font-bold mb-1">ランク {result.level}</div>
           <p className="text-gray-600">{result.summary}</p>
         </div>
 
@@ -173,7 +173,7 @@ export default function DiagnosisPage() {
           </button>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <a
             href="/engineer"
             className="flex-1 text-center py-3 bg-indigo-600 text-white rounded-lg font-medium"
@@ -216,11 +216,11 @@ export default function DiagnosisPage() {
       </div>
 
       {!isComplete && (
-        <div className="bg-white p-8 rounded-xl border">
+        <div className="bg-white p-5 sm:p-8 rounded-xl border">
           <div className="text-sm text-gray-500 mb-2">
             質問 {step + 1} / {QUESTIONS.length}
           </div>
-          <h2 className="text-xl font-bold mb-6">{current.question}</h2>
+          <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">{current.question}</h2>
           <div className="space-y-3">
             {current.options.map((opt) => (
               <button
