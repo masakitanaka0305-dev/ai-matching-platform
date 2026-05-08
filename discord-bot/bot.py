@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.getenv("DISCORD_BOT_TOKEN", "")
-API_BASE = os.getenv("API_BASE_URL", "http://localhost:8000/api/v1")
+API_BASE = os.getenv("API_BASE_URL", "https://ai-matching-platform-production.up.railway.app/api/v1")
 
 intents = discord.Intents.default()
 intents.message_content = True

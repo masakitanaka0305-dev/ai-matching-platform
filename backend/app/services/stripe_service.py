@@ -7,6 +7,7 @@ Stripe決済サービス
   2. 月額プラン（monthly）: 月額固定で候補者閲覧し放題
   3. 診断レポート（diagnosis_report）: 有料版詳細レポート
 """
+import os
 from datetime import datetime
 from uuid import UUID
 from typing import Optional
@@ -22,6 +23,10 @@ try:
     STRIPE_AVAILABLE = True
 except ImportError:
     STRIPE_AVAILABLE = False
+
+
+def _frontend_url() -> str:
+    return os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 
 class StripeService:
@@ -57,17 +62,17 @@ class StripeService:
         match: Match,
         db: Session,
         amount: Optional[int] = None,
-        success_url: str = "http://localhost:3000/payment/success",
-        cancel_url: str = "http://localhost:3000/payment/cancel",
+        success_url: Optional[str] = None,
+        cancel_url: Optional[str] = None,
     ) -> dict:
-        """
-        マッチング成約時の成功報酬 Checkout Session を作成。
-        返却: {checkout_url, session_id, payment_id}
-        """
+        """マッチング成約時の成功報酬 Checkout Session を作成。"""
+        base = _frontend_url()
+        success_url = success_url or f"{base}/payment/success"
+        cancel_url = cancel_url or f"{base}/payment/cancel"
+
         fee = amount or settings.success_fee_amount
         customer_id = await self.get_or_create_customer(company, db)
 
-        # Payment レコード作成（pending）
         payment = Payment(
             company_id=company.id,
             match_id=match.id,
@@ -80,7 +85,6 @@ class StripeService:
         db.commit()
         db.refresh(payment)
 
-        # Stripe Checkout Session
         session = stripe.checkout.Session.create(
             customer=customer_id,
             payment_method_types=["card"],
@@ -122,11 +126,15 @@ class StripeService:
         self,
         company: Company,
         db: Session,
-        price_id: str = "",  # Stripe Price ID（事前にダッシュボードで作成）
-        success_url: str = "http://localhost:3000/payment/success",
-        cancel_url: str = "http://localhost:3000/payment/cancel",
+        price_id: str = "",
+        success_url: Optional[str] = None,
+        cancel_url: Optional[str] = None,
     ) -> dict:
         """月額プランのCheckout Session"""
+        base = _frontend_url()
+        success_url = success_url or f"{base}/payment/success"
+        cancel_url = cancel_url or f"{base}/payment/cancel"
+
         customer_id = await self.get_or_create_customer(company, db)
 
         session = stripe.checkout.Session.create(
@@ -154,11 +162,15 @@ class StripeService:
         self,
         engineer_id: UUID,
         db: Session,
-        amount: int = 5000,  # 5,000円
-        success_url: str = "http://localhost:3000/diagnosis/success",
-        cancel_url: str = "http://localhost:3000/diagnosis/cancel",
+        amount: int = 5000,
+        success_url: Optional[str] = None,
+        cancel_url: Optional[str] = None,
     ) -> dict:
         """無料診断→有料レポートの購入Checkout"""
+        base = _frontend_url()
+        success_url = success_url or f"{base}/payment/success"
+        cancel_url = cancel_url or f"{base}/payment/cancel"
+
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             line_items=[{
@@ -212,9 +224,7 @@ class StripeService:
         payment_id = metadata.get("payment_id")
 
         if payment_id:
-            payment = db.query(Payment).filter(
-                Payment.id == payment_id
-            ).first()
+            payment = db.query(Payment).filter(Payment.id == payment_id).first()
             if payment:
                 payment.status = PaymentStatus.succeeded
                 payment.paid_at = datetime.utcnow()

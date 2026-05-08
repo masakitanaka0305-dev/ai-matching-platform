@@ -175,5 +175,41 @@ class DiscordNotifier:
         return await self._send_message(target, embed)
 
 
+    async def _send_to_channel(self, content: str, channel_id: str | None = None):
+        """テキストメッセージをチャンネルに送信（スケジューラ用）"""
+        target = channel_id or self.channel_id
+        if not target or not self.token:
+            print(f"[Discord] Skip (no token/channel): {content[:80]}")
+            return
+        async with httpx.AsyncClient() as client:
+            try:
+                await client.post(
+                    f"{DISCORD_API_BASE}/channels/{target}/messages",
+                    headers=self.headers,
+                    json={"content": content},
+                )
+            except Exception as e:
+                print(f"[Discord] Send error: {e}")
+
+    async def notify_match_created(
+        self,
+        engineer_name: str,
+        company_name: str,
+        posting_title: str,
+        ai_score: float,
+        match_id: str,
+        channel_id: str | None = None,
+    ):
+        """マッチ作成通知（スケジューラ互換）"""
+        return await self.notify_new_match(
+            engineer_name=engineer_name,
+            company_name=company_name,
+            posting_title=posting_title,
+            ai_score=ai_score,
+            match_id=match_id,
+            channel_id=channel_id,
+        )
+
+
 # シングルトン
 notifier = DiscordNotifier()

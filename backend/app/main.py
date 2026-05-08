@@ -16,7 +16,11 @@ from .models.database import engine, Base
 async def lifespan(app: FastAPI):
     # 起動時にテーブル自動作成
     Base.metadata.create_all(bind=engine)
+    # 定期タスクスケジューラ開始
+    from .services.scheduler import scheduler
+    scheduler.start()
     yield
+    scheduler.stop()
 
 
 app = FastAPI(
