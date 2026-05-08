@@ -2,17 +2,29 @@ from __future__ import annotations
 """
 AI人材マッチングプラットフォーム - FastAPI エントリポイント
 """
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .api import engineers, companies, matches, matching, payments, postings, diagnosis, reports
 from .core.config import settings
+from .models.database import engine, Base
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 起動時にテーブル自動作成
+    Base.metadata.create_all(bind=engine)
+    yield
+
 
 app = FastAPI(
     title=settings.app_name,
     version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # CORS（Next.jsフロントエンド用）
