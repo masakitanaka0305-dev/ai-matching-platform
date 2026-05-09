@@ -16,6 +16,12 @@ function NavLinks() {
         求人作成
       </a>
       <a
+        href="/company/pricing"
+        className="block py-2 md:py-0 text-sm font-medium text-gray-600 hover:text-indigo-600 transition"
+      >
+        料金プラン
+      </a>
+      <a
         href="/company/register"
         className="block py-2 md:py-0 text-sm font-medium text-gray-600 hover:text-indigo-600 transition"
       >

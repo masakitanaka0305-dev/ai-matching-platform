@@ -315,6 +315,13 @@ class StripeService:
                     report = assessment_service.generate_report(match, db)
                     match.assessment_report = report
 
+                    # エンゲージメントインサイト自動生成
+                    try:
+                        from .engagement_service import engagement_service
+                        engagement_service.generate_insights(match, db)
+                    except Exception:
+                        pass
+
                     # イベントログ
                     event = MatchEvent(
                         match_id=match.id,
@@ -326,6 +333,23 @@ class StripeService:
                     )
                     db.add(event)
                     db.commit()
+
+                    # Discord通知
+                    try:
+                        from .discord_notifier import notifier
+                        import asyncio
+                        engineer = match.engineer
+                        company = match.posting.company
+                        asyncio.get_event_loop().create_task(
+                            notifier.notify_scout_approach_unlocked(
+                                company_name=company.name,
+                                engineer_name=engineer.name,
+                                amount=settings.scout_approach_amount,
+                                match_id=str(match.id),
+                            )
+                        )
+                    except Exception:
+                        pass
 
         return {"status": "processed", "type": "checkout.session.completed"}
 

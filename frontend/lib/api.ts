@@ -202,6 +202,47 @@ export const companyMatchApi = {
     request<CompanyMatch[]>(`/matches/company/${companyId}?status=${status || ""}`),
 };
 
+// ------------------------------------------------------------------
+// Engagement Insights & Approach
+// ------------------------------------------------------------------
+export interface EngagementInsight {
+  insight_type: string;
+  content: string;
+  confidence: number;
+}
+
+export interface FollowupStatus {
+  total_messages: number;
+  read_count: number;
+  last_sent_at: string | null;
+  recommend_followup: boolean;
+  followup_reason: string;
+}
+
+export interface InsightsResponse {
+  match_id: string;
+  insights: EngagementInsight[];
+  followup_status: FollowupStatus;
+}
+
+export interface ApproachResult {
+  message_id: string;
+  suggestions: string[];
+  optimization_score: number;
+}
+
+export const engagementApi = {
+  getInsights: (matchId: string) =>
+    request<InsightsResponse>(`/matches/${matchId}/insights`),
+  sendApproach: (matchId: string, companyId: string, subject: string, body: string) =>
+    request<ApproachResult>(`/matches/${matchId}/approach`, {
+      method: "POST",
+      body: JSON.stringify({ company_id: companyId, subject, body }),
+    }),
+  getFollowup: (matchId: string) =>
+    request<FollowupStatus>(`/matches/${matchId}/followup`),
+};
+
 export const scoutApproachApi = {
   createCheckout: (companyId: string, matchId: string) =>
     request<{ checkout_url: string; session_id: string; payment_id: string }>(

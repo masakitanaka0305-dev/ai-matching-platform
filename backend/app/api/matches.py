@@ -8,11 +8,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..models import get_db, Match, MatchEvent, MatchStatus, Engineer, JobPosting, Company
+from pydantic import BaseModel as PydanticBaseModel
 from ..schemas.schemas import (
     MatchResponse, MatchStatusUpdate,
     CompanyMatchResponse, MaskedCandidateInfo, UnlockedCandidateInfo,
 )
 from ..services.discord_notifier import notifier
+from ..services.engagement_service import engagement_service
 
 router = APIRouter(prefix="/matches", tags=["matches"])
 
@@ -167,3 +169,89 @@ async def update_match_status(
         pass
 
     return match
+
+
+# ------------------------------------------------------------------
+# エンゲージメントインサイト
+# ------------------------------------------------------------------
+@router.get("/{match_id}/insights")
+def get_engagement_insights(match_id: UUID, db: Session = Depends(get_db)):
+    """プラットフォーム限定のエンゲージメントインサイトを返却"""
+    match = db.query(Match).filter(Match.id == match_id).first()
+    if not match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    if not match.is_unlocked:
+        raise HTTPException(status_code=403, detail="アプローチ権が未解放です")
+
+    # 既存インサイトがなければ生成
+    insights = engagement_service.get_insights(str(match.id), db)
+    if not insights:
+        insights = engagement_service.generate_insights(match, db)
+
+    followup = engagement_service.get_followup_status(str(match.id), db)
+
+    return {
+        "match_id": str(match.id),
+        "insights": insights,
+        "followup_status": followup,
+    }
+
+
+# ------------------------------------------------------------------
+# プラットフォーム内アプローチメッセージ送信
+# ------------------------------------------------------------------
+class ApproachMessageRequest(PydanticBaseModel):
+    company_id: UUID
+    subject: str = ""
+    body: str
+
+
+@router.post("/{match_id}/approach")
+async def send_approach_message(
+    match_id: UUID,
+    payload: ApproachMessageRequest,
+    db: Session = Depends(get_db),
+):
+    """プラットフォーム経由でアプローチメッセージを送信。AI最適化付き。"""
+    match = db.query(Match).filter(Match.id == match_id).first()
+    if not match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    if not match.is_unlocked:
+        raise HTTPException(status_code=403, detail="アプローチ権が未解放です")
+
+    result = engagement_service.optimize_approach_message(
+        match=match,
+        subject=payload.subject,
+        body=payload.body,
+        db=db,
+    )
+
+    # Discord通知
+    try:
+        engineer = db.query(Engineer).filter(Engineer.id == match.engineer_id).first()
+        posting = db.query(JobPosting).filter(JobPosting.id == match.posting_id).first()
+        company = db.query(Company).filter(Company.id == posting.company_id).first()
+        await notifier.notify_approach_sent(
+            company_name=company.name,
+            engineer_name=engineer.name,
+            match_id=str(match.id),
+        )
+    except Exception:
+        pass
+
+    return result
+
+
+# ------------------------------------------------------------------
+# フォローアップステータス
+# ------------------------------------------------------------------
+@router.get("/{match_id}/followup")
+def get_followup_status(match_id: UUID, db: Session = Depends(get_db)):
+    """フォローアップ推奨ステータスを返却"""
+    match = db.query(Match).filter(Match.id == match_id).first()
+    if not match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    if not match.is_unlocked:
+        raise HTTPException(status_code=403, detail="アプローチ権が未解放です")
+
+    return engagement_service.get_followup_status(str(match.id), db)

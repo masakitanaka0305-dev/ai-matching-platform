@@ -338,6 +338,7 @@ class DashboardUnit:
         total_post = len(postings) if isinstance(postings, list) else 0
 
         proposed = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "proposed")
+        unlocked = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "approach_unlocked")
         accepted = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "accepted")
         rejected = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "rejected")
 
@@ -352,6 +353,7 @@ class DashboardUnit:
         embed.add_field(name="📝 求人", value=f"**{total_post}**件", inline=True)
         embed.add_field(name="🤝 マッチ合計", value=f"**{total_match}**件", inline=True)
         embed.add_field(name="⏳ 保留中", value=f"**{proposed}**件", inline=True)
+        embed.add_field(name="🔓 解放済", value=f"**{unlocked}**件", inline=True)
         embed.add_field(name="✅ 成約", value=f"**{accepted}**件", inline=True)
 
         # パイプライン
@@ -422,7 +424,7 @@ class DashboardActionView(ui.View):
                 return
             embed = discord.Embed(title="📋 最新マッチ一覧", color=0x5865F2)
             for m in matches[:10]:
-                status_emoji = {"proposed": "⏳", "accepted": "✅", "rejected": "❌"}.get(m.get("status", ""), "🔄")
+                status_emoji = {"proposed": "⏳", "accepted": "✅", "rejected": "❌", "approach_unlocked": "🔓", "company_reviewed": "👀"}.get(m.get("status", ""), "🔄")
                 embed.add_field(
                     name=f"{status_emoji} Score: {m.get('ai_score', 0):.0f}",
                     value=f"ID: `{m['id'][:8]}...` | Status: `{m['status']}`",

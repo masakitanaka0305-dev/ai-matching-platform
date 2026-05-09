@@ -323,3 +323,39 @@ class Payment(Base):
     paid_at = Column(DateTime, nullable=True)
 
     company = relationship("Company", back_populates="payments")
+
+
+# ---------------------------------------------------------------------------
+# プラットフォーム内アプローチメッセージ
+# ---------------------------------------------------------------------------
+class ApproachMessage(Base):
+    __tablename__ = "approach_messages"
+
+    id = Column(String(36), primary_key=True, default=_uuid)
+    match_id = Column(String(36), ForeignKey("matches.id", ondelete="CASCADE"), nullable=False)
+    sender_type = Column(String(20), nullable=False)  # "company" or "engineer"
+    sender_id = Column(String(36), nullable=False)
+    subject = Column(String(300), nullable=True)
+    body = Column(Text, nullable=False)
+    ai_optimized = Column(Boolean, default=False)
+    ai_suggestions = Column(JSONType, nullable=True)
+    read_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    match = relationship("Match")
+
+
+# ---------------------------------------------------------------------------
+# エンゲージメントインサイト（AI生成）
+# ---------------------------------------------------------------------------
+class EngagementInsight(Base):
+    __tablename__ = "engagement_insights"
+
+    id = Column(String(36), primary_key=True, default=_uuid)
+    match_id = Column(String(36), ForeignKey("matches.id", ondelete="CASCADE"), nullable=False)
+    insight_type = Column(String(50), nullable=False)  # contact_preference, tech_interest, response_tip
+    content = Column(Text, nullable=False)
+    confidence = Column(Numeric(3, 2), default=0.8)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    match = relationship("Match")

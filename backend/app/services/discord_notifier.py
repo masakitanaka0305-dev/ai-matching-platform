@@ -175,6 +175,52 @@ class DiscordNotifier:
         return await self._send_message(target, embed)
 
 
+    async def notify_approach_sent(
+        self,
+        company_name: str,
+        engineer_name: str,
+        match_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """アプローチメッセージ送信通知"""
+        embed = {
+            "title": "📨 アプローチ送信",
+            "color": 0x9B59B6,
+            "fields": [
+                {"name": "企業", "value": company_name, "inline": True},
+                {"name": "候補者", "value": engineer_name, "inline": True},
+                {"name": "Match ID", "value": f"`{match_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
+    async def notify_scout_approach_unlocked(
+        self,
+        company_name: str,
+        engineer_name: str,
+        amount: int,
+        match_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """優先アプローチ権解放通知"""
+        embed = {
+            "title": "🔓 優先アプローチ権 解放",
+            "color": 0xF1C40F,
+            "fields": [
+                {"name": "企業", "value": company_name, "inline": True},
+                {"name": "候補者", "value": engineer_name, "inline": True},
+                {"name": "金額", "value": f"¥{amount:,}", "inline": True},
+                {"name": "Match ID", "value": f"`{match_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform — 技術鑑定書生成完了"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
     async def _send_to_channel(self, content: str, channel_id: str | None = None):
         """テキストメッセージをチャンネルに送信（スケジューラ用）"""
         target = channel_id or self.channel_id

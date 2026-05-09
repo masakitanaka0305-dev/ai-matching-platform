@@ -178,6 +178,7 @@ export default function CompanyDashboard() {
                 <CandidateCard
                   key={m.id}
                   match={m}
+                  companyId={companyId}
                   onUnlock={handleUnlock}
                   onApprovalPdf={handleApprovalPdf}
                 />
