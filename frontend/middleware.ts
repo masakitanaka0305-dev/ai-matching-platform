@@ -11,10 +11,15 @@ import type { NextRequest } from "next/server";
  * Railway の Service Variables で設定すれば即時反映される。
  */
 export function middleware(request: NextRequest) {
-  const apiUrl =
+  let apiUrl =
     process.env.API_URL ||
     process.env.NEXT_PUBLIC_API_URL ||
     "http://localhost:8000";
+
+  // プロトコルが省略されている場合は https:// を補完
+  if (apiUrl && !apiUrl.startsWith("http://") && !apiUrl.startsWith("https://")) {
+    apiUrl = `https://${apiUrl}`;
+  }
 
   const dest = new URL(
     request.nextUrl.pathname + request.nextUrl.search,
