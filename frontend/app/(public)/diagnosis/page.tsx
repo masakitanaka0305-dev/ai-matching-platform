@@ -177,7 +177,7 @@ export default function DiagnosisPage() {
     ].map((sk) => ({
       ...sk,
       level: sk.score >= 75 ? "Advanced" : sk.score >= 60 ? "Intermediate" : sk.score >= 45 ? "Beginner-Mid" : "Beginner",
-      color: sk.score >= 75 ? "bg-indigo-100 text-indigo-700" : sk.score >= 60 ? "bg-blue-100 text-blue-700" : sk.score >= 45 ? "bg-amber-100 text-amber-700" : "bg-gray-100 text-gray-600",
+      color: sk.score >= 75 ? "bg-[#4f46e5]/10 text-[#4f46e5]" : sk.score >= 60 ? "bg-blue-100 text-blue-700" : sk.score >= 45 ? "bg-amber-100 text-amber-700" : "bg-gray-100 text-gray-600",
     }));
 
     const strengths = [
@@ -230,50 +230,71 @@ export default function DiagnosisPage() {
     return (
       <div className="space-y-0">
         {/* Hero */}
-        <section className="bg-gradient-to-b from-indigo-50 to-white py-14 sm:py-20 text-center px-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4">
-            AI/MLエンジニア<br />市場価値診断
-          </h1>
+        <section className="relative bg-[#0f172a] overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#4f46e5] opacity-[0.08] blur-[120px]" />
+          <div className="relative py-16 sm:py-24 text-center px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4 text-white">
+              AI/MLエンジニア
+              <br />
+              <span className="gradient-text">市場価値診断</span>
+            </h1>
+            <p className="text-gray-400 max-w-lg mx-auto">
+              5つの質問に答えるだけで、あなたのAIエンジニアとしての市場価値をスコアリング
+            </p>
+          </div>
         </section>
 
         {/* 診断で分かること */}
-        <section className="max-w-3xl mx-auto px-4 -mt-6">
-          <div className="bg-gray-50 rounded-2xl p-6 sm:p-10">
-            <h2 className="text-xl sm:text-2xl font-bold text-center mb-8">診断で分かること</h2>
+        <section className="max-w-3xl mx-auto px-4 -mt-8 relative z-10">
+          <div className="card p-6 sm:p-10">
+            <h2 className="text-xl sm:text-2xl font-bold text-center mb-8 text-[#0f172a]">診断で分かること</h2>
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0">
-                  &#x2197;
+                <div className="w-12 h-12 rounded-xl bg-[#4f46e5]/10 flex items-center justify-center shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="20" x2="12" y2="10" />
+                    <line x1="18" y1="20" x2="18" y2="4" />
+                    <line x1="6" y1="20" x2="6" y2="16" />
+                  </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">市場スコア</h4>
+                  <h4 className="font-bold mb-1 text-[#0f172a]">市場スコア</h4>
                   <p className="text-sm text-gray-600">あなたのスキルレベルを数値化。Junior/Mid/Senior/Expertのランク判定</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-xl shrink-0">
-                  &#x1F4CA;
+                <div className="w-12 h-12 rounded-xl bg-[#f59e0b]/10 flex items-center justify-center shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                  </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">推定年収レンジ</h4>
+                  <h4 className="font-bold mb-1 text-[#0f172a]">推定年収レンジ</h4>
                   <p className="text-sm text-gray-600">業界データに基づいた適正年収を算出（下限〜上限）</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-xl shrink-0">
-                  &#10003;
+                <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">技術的強み分析</h4>
+                  <h4 className="font-bold mb-1 text-[#0f172a]">技術的強み分析</h4>
                   <p className="text-sm text-gray-600">どの技術領域・フレームワークで市場価値が高いか可視化</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-red-100 text-red-500 flex items-center justify-center text-xl shrink-0">
-                  &#x1F3AF;
+                <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center shrink-0">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                    <line x1="9" y1="9" x2="9.01" y2="9" />
+                    <line x1="15" y1="9" x2="15.01" y2="9" />
+                  </svg>
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">キャリアアドバイス</h4>
+                  <h4 className="font-bold mb-1 text-[#0f172a]">キャリアアドバイス</h4>
                   <p className="text-sm text-gray-600">次のステップに進むために習得すべきスキルを提案</p>
                 </div>
               </div>
@@ -284,26 +305,26 @@ export default function DiagnosisPage() {
         {/* 3 stats */}
         <section className="max-w-3xl mx-auto px-4 py-10">
           <div className="grid grid-cols-3 gap-4">
-            <div className="border rounded-xl p-5 text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-indigo-600">5分</div>
+            <div className="card p-5 text-center">
+              <div className="text-2xl sm:text-3xl font-bold text-[#4f46e5]">5分</div>
               <div className="text-sm text-gray-500 mt-1">所要時間</div>
             </div>
-            <div className="border rounded-xl p-5 text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-indigo-600">完全無料</div>
+            <div className="card p-5 text-center">
+              <div className="text-2xl sm:text-3xl font-bold text-[#4f46e5]">完全無料</div>
               <div className="text-sm text-gray-500 mt-1">登録不要</div>
             </div>
-            <div className="border rounded-xl p-5 text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-indigo-600">即時結果</div>
+            <div className="card p-5 text-center">
+              <div className="text-2xl sm:text-3xl font-bold text-[#4f46e5]">即時結果</div>
               <div className="text-sm text-gray-500 mt-1">すぐに確認</div>
             </div>
           </div>
         </section>
 
         {/* CTA */}
-        <section className="text-center pb-14 px-4">
+        <section className="text-center pb-16 px-4">
           <button
             onClick={() => setPhase("quiz")}
-            className="px-12 sm:px-16 py-4 sm:py-5 bg-indigo-600 text-white rounded-xl text-lg sm:text-xl font-bold hover:bg-indigo-700 transition"
+            className="btn-primary text-lg px-14 sm:px-20 py-5"
           >
             診断を開始する
           </button>
@@ -317,8 +338,13 @@ export default function DiagnosisPage() {
   if (phase === "quiz") {
     if (loading) {
       return (
-        <div className="max-w-2xl mx-auto text-center py-20">
-          <div className="text-xl font-bold mb-2">診断中...</div>
+        <div className="max-w-2xl mx-auto text-center py-20 px-4">
+          <div className="w-16 h-16 rounded-2xl bg-[#4f46e5]/10 flex items-center justify-center mx-auto mb-4">
+            <svg className="animate-spin" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" strokeWidth="2">
+              <path d="M21 12a9 9 0 11-6.219-8.56" />
+            </svg>
+          </div>
+          <div className="text-xl font-bold mb-2 text-[#0f172a]">診断中...</div>
           <p className="text-gray-600">AIがあなたの市場価値を分析しています。</p>
         </div>
       );
@@ -328,34 +354,36 @@ export default function DiagnosisPage() {
       <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12">
         {/* Progress */}
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-indigo-600 font-medium">
+          <span className="text-sm text-[#4f46e5] font-medium">
             質問 {step + 1} / {QUESTIONS.length}
           </span>
-          <span className="text-sm text-indigo-600 font-medium">
+          <span className="text-sm text-[#4f46e5] font-medium">
             {Math.round(progressPct)}% 完了
           </span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2.5 mb-10">
           <div
-            className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
+            className="bg-gradient-to-r from-[#4f46e5] to-[#6366f1] h-2.5 rounded-full transition-all duration-500"
             style={{ width: `${progressPct}%` }}
           />
         </div>
 
         {/* Question Card */}
-        <div className="bg-white rounded-2xl border p-6 sm:p-10">
-          <h2 className="text-lg sm:text-xl font-bold mb-6 sm:mb-8">{current.question}</h2>
+        <div className="card p-6 sm:p-10">
+          <h2 className="text-lg sm:text-xl font-bold mb-6 sm:mb-8 text-[#0f172a]">{current.question}</h2>
           <div className="space-y-3">
             {current.options.map((opt) => (
               <button
                 key={opt.key}
                 onClick={() => handleSelect(opt.label)}
-                className={`w-full flex items-center gap-4 text-left px-5 py-4 rounded-xl border transition hover:border-indigo-400 hover:bg-indigo-50 ${
-                  answers[current.id] === opt.label ? "border-indigo-600 bg-indigo-50" : ""
+                className={`w-full flex items-center gap-4 text-left px-5 py-4 rounded-xl border-2 transition hover:border-[#4f46e5] hover:bg-[#4f46e5]/5 ${
+                  answers[current.id] === opt.label ? "border-[#4f46e5] bg-[#4f46e5]/5 border-l-4" : "border-gray-100"
                 }`}
               >
-                <span className="text-gray-400 font-bold text-sm shrink-0">{opt.key}.</span>
-                <span className="font-medium">{opt.label}</span>
+                <span className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-sm shrink-0">
+                  {opt.key}
+                </span>
+                <span className="font-medium text-[#0f172a]">{opt.label}</span>
               </button>
             ))}
           </div>
@@ -380,52 +408,54 @@ export default function DiagnosisPage() {
       { name: "事業会社AI部門", count: 18, highlight: false },
     ];
 
+    const barColors = ["bg-[#4f46e5]", "bg-[#6366f1]", "bg-blue-500", "bg-[#8b5cf6]", "bg-[#f59e0b]"];
+
     return (
       <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12 space-y-6">
         <div className="text-center mb-2">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-1">市場価値診断結果</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-1 text-[#0f172a]">市場価値診断結果</h1>
           <p className="text-sm text-gray-500">あなたのAI/MLエンジニアとしての市場価値を分析しました</p>
         </div>
 
         {/* Score Hero */}
-        <div className="bg-gradient-to-b from-indigo-600 to-indigo-700 rounded-2xl p-8 sm:p-10 text-center text-white">
-          <div className="text-6xl sm:text-8xl font-bold mb-2">{result.score}</div>
+        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl p-8 sm:p-10 text-center text-white shadow-xl">
+          <div className="text-6xl sm:text-8xl font-black mb-2">{result.score}</div>
           <div className="text-lg sm:text-xl font-bold mb-2">{result.summary}</div>
-          <p className="text-indigo-200 text-sm">
+          <p className="text-gray-400 text-sm">
             実装力と専門性を兼ね備えており、Tech Lead候補としての需要があります。
           </p>
-          <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-indigo-500">
+          <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-gray-700">
             <div>
-              <div className="text-xl sm:text-2xl font-bold">{result.salaryRange}</div>
-              <div className="text-xs text-indigo-200 mt-1">推定年収レンジ</div>
+              <div className="text-xl sm:text-2xl font-bold gradient-text">{result.salaryRange}</div>
+              <div className="text-xs text-gray-400 mt-1">推定年収レンジ</div>
             </div>
             <div>
-              <div className="text-xl sm:text-2xl font-bold">{result.percentile}</div>
-              <div className="text-xs text-indigo-200 mt-1">AI/ML市場での位置</div>
+              <div className="text-xl sm:text-2xl font-bold gradient-text">{result.percentile}</div>
+              <div className="text-xs text-gray-400 mt-1">AI/ML市場での位置</div>
             </div>
             <div>
-              <div className="text-xl sm:text-2xl font-bold">{result.matchCount}社</div>
-              <div className="text-xs text-indigo-200 mt-1">マッチング可能企業</div>
+              <div className="text-xl sm:text-2xl font-bold gradient-text">{result.matchCount}社</div>
+              <div className="text-xs text-gray-400 mt-1">マッチング可能企業</div>
             </div>
           </div>
         </div>
 
         {/* スキル別評価 */}
-        <div className="bg-white rounded-2xl border p-6 sm:p-8">
-          <h3 className="text-lg font-bold mb-1">スキル別評価</h3>
+        <div className="card p-6 sm:p-8">
+          <h3 className="text-lg font-bold mb-1 text-[#0f172a]">スキル別評価</h3>
           <p className="text-sm text-gray-500 mb-6">各技術領域でのあなたの習熟度を可視化</p>
           <div className="space-y-4">
-            {result.skills.map((sk) => (
+            {result.skills.map((sk, i) => (
               <div key={sk.name}>
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">{sk.name}</span>
+                    <span className="text-sm font-medium text-[#0f172a]">{sk.name}</span>
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${sk.color}`}>{sk.level}</span>
                   </div>
-                  <span className="text-sm font-bold">{sk.score}</span>
+                  <span className="text-sm font-bold text-[#0f172a]">{sk.score}</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div className="bg-gray-800 h-2.5 rounded-full" style={{ width: `${sk.score}%` }} />
+                <div className="w-full bg-gray-100 rounded-full h-2.5">
+                  <div className={`${barColors[i % barColors.length]} h-2.5 rounded-full transition-all duration-500`} style={{ width: `${sk.score}%` }} />
                 </div>
               </div>
             ))}
@@ -434,23 +464,40 @@ export default function DiagnosisPage() {
 
         {/* 強み & 改善 */}
         <div className="grid sm:grid-cols-2 gap-4">
-          <div className="bg-white rounded-2xl border p-5">
+          <div className="card p-5">
+            <h4 className="text-sm font-bold text-[#0f172a] mb-3 flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
+              強み
+            </h4>
             {result.strengths.map((s, i) => (
               <div key={i} className="flex gap-3 mb-3 last:mb-0">
-                <span className="text-green-500 mt-0.5">&#9733;</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b" className="shrink-0 mt-0.5">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
                 <div>
-                  <div className="text-sm font-bold">{s}</div>
+                  <div className="text-sm font-bold text-[#0f172a]">{s}</div>
                   <div className="text-xs text-gray-500">需要の高い領域での専門性が評価されています</div>
                 </div>
               </div>
             ))}
           </div>
-          <div className="bg-white rounded-2xl border p-5">
+          <div className="card p-5">
+            <h4 className="text-sm font-bold text-[#0f172a] mb-3 flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="20" x2="12" y2="10" />
+                <line x1="18" y1="20" x2="18" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="16" />
+              </svg>
+              伸びしろ
+            </h4>
             {result.improvements.map((s, i) => (
               <div key={i} className="flex gap-3 mb-3 last:mb-0">
-                <span className="text-orange-500 mt-0.5">&#x2197;</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-0.5">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                  <polyline points="17 6 23 6 23 12" />
+                </svg>
                 <div>
-                  <div className="text-sm font-bold">{s}</div>
+                  <div className="text-sm font-bold text-[#0f172a]">{s}</div>
                   <div className="text-xs text-gray-500">経験を積むと市場価値がさらに向上</div>
                 </div>
               </div>
@@ -459,27 +506,27 @@ export default function DiagnosisPage() {
         </div>
 
         {/* AI/ML市場でのポジション */}
-        <div className="bg-white rounded-2xl border p-6 sm:p-8">
-          <h3 className="text-lg font-bold mb-1">AI/ML市場でのポジション</h3>
+        <div className="card p-6 sm:p-8">
+          <h3 className="text-lg font-bold mb-1 text-[#0f172a]">AI/ML市場でのポジション</h3>
           <p className="text-sm text-gray-500 mb-6">他のエンジニアと比較したあなたの立ち位置</p>
           <div className="space-y-3">
             {marketTiers.map((tier) => (
               <div
                 key={tier.label}
-                className={`p-4 rounded-xl border-2 ${tier.active ? "border-indigo-600 bg-indigo-50" : "border-gray-100 bg-white"}`}
+                className={`p-4 rounded-xl border-2 transition ${tier.active ? "border-[#4f46e5] bg-[#4f46e5]/5" : "border-gray-100 bg-white"}`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold">{tier.label}</span>
+                    <span className="text-sm font-bold text-[#0f172a]">{tier.label}</span>
                     {tier.active && (
-                      <span className="text-xs bg-indigo-600 text-white px-2 py-0.5 rounded">あなたはここ</span>
+                      <span className="text-xs bg-[#4f46e5] text-white px-2 py-0.5 rounded-full font-bold">あなたはここ</span>
                     )}
                   </div>
                   <span className="text-sm text-gray-500">{tier.pct}%<span className="text-xs ml-1">市場割合</span></span>
                 </div>
                 {tier.salary && <div className="text-xs text-gray-500">{tier.salary}</div>}
-                <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                  <div className={`h-2 rounded-full ${tier.active ? "bg-indigo-600" : "bg-gray-400"}`} style={{ width: `${tier.pct}%` }} />
+                <div className="w-full bg-gray-100 rounded-full h-2 mt-2">
+                  <div className={`h-2 rounded-full ${tier.active ? "bg-[#4f46e5]" : "bg-gray-300"}`} style={{ width: `${tier.pct}%` }} />
                 </div>
               </div>
             ))}
@@ -490,56 +537,60 @@ export default function DiagnosisPage() {
         </div>
 
         {/* マッチング可能な企業 */}
-        <div className="bg-white rounded-2xl border p-6 sm:p-8">
-          <h3 className="text-lg font-bold mb-1">マッチング可能な企業</h3>
+        <div className="card p-6 sm:p-8">
+          <h3 className="text-lg font-bold mb-1 text-[#0f172a]">マッチング可能な企業</h3>
           <p className="text-sm text-gray-500 mb-6">あなたのスキルセットに興味を持つ企業の分布</p>
           <div className="grid grid-cols-2 gap-3">
             {matchCategories.map((cat) => (
-              <div key={cat.name} className="border rounded-xl p-4 flex items-center justify-between">
+              <div key={cat.name} className="card p-4 flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-bold">{cat.name}</div>
+                  <div className="text-sm font-bold text-[#0f172a]">{cat.name}</div>
                   {cat.highlight && (
-                    <span className="text-xs text-green-600">●高マッチング率</span>
+                    <span className="text-xs text-green-600 font-medium flex items-center gap-1">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="#22c55e"><circle cx="12" cy="12" r="6" /></svg>
+                      高マッチング率
+                    </span>
                   )}
                 </div>
-                <span className="text-2xl font-bold text-indigo-600">{cat.count}</span>
+                <span className="text-2xl font-black text-[#4f46e5]">{cat.count}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* 有料レポート CTA */}
-        <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-center text-white">
+        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl p-6 sm:p-8 text-center text-white shadow-xl">
           <h3 className="text-lg font-bold mb-2">さらに詳細な分析が必要ですか？</h3>
-          <p className="text-sm text-indigo-200 mb-6">
-            GitHub活動の詳細分析・類似プロフィールとの比較・具体的な企業推薦を含む<br />
+          <p className="text-sm text-gray-400 mb-6">
+            GitHub活動の詳細分析・類似プロフィールとの比較・具体的な企業推薦を含む
+            <br />
             30ページ超の詳細レポートをご提供します
           </p>
-          <div className="flex justify-center gap-4 mb-6">
+          <div className="flex justify-center gap-3 flex-wrap mb-6">
             {["GitHubコード分析", "具体的企業マッチング", "1on1キャリア相談"].map((item) => (
-              <span key={item} className="text-xs bg-white/20 rounded-full px-3 py-1.5">{item}</span>
+              <span key={item} className="text-xs bg-white/10 rounded-full px-3 py-1.5 border border-white/10">{item}</span>
             ))}
           </div>
           <button
             onClick={handlePurchaseReport}
-            className="px-8 py-3 bg-white text-indigo-700 rounded-xl font-bold hover:bg-indigo-50 transition"
+            className="px-8 py-3 bg-[#f59e0b] text-[#0f172a] rounded-xl font-bold hover:bg-[#fbbf24] transition shadow-lg"
           >
             詳細レポートを取得（¥5,000）
           </button>
-          <p className="text-xs text-indigo-300 mt-3">※ 30日間返金保証付き</p>
+          <p className="text-xs text-gray-500 mt-3">※ 30日間返金保証付き</p>
         </div>
 
         {/* Bottom CTAs */}
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <a
             href="/engineer"
-            className="flex-1 text-center py-3.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition"
+            className="flex-1 text-center btn-primary py-3.5"
           >
-            マッチングに登録する →
+            マッチングに登録する
           </a>
           <button
             onClick={resetDiagnosis}
-            className="flex-1 py-3.5 border border-gray-300 rounded-xl font-bold hover:bg-gray-50 transition"
+            className="flex-1 btn-secondary py-3.5"
           >
             もう一度診断する
           </button>
