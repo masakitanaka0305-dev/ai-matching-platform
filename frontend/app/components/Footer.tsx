@@ -34,10 +34,10 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-bold text-[#f59e0b] mb-4 tracking-wider">会社情報</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><a href="#" className="hover:text-white transition">運営会社</a></li>
-              <li><a href="#" className="hover:text-white transition">利用規約</a></li>
-              <li><a href="#" className="hover:text-white transition">プライバシーポリシー</a></li>
-              <li><a href="#" className="hover:text-white transition">特定商取引法に基づく表記</a></li>
+              <li><a href="/about" className="hover:text-white transition">運営会社</a></li>
+              <li><a href="/terms" className="hover:text-white transition">利用規約</a></li>
+              <li><a href="/privacy" className="hover:text-white transition">プライバシーポリシー</a></li>
+              <li><a href="/legal" className="hover:text-white transition">特定商取引法に基づく表記</a></li>
             </ul>
           </div>
 
@@ -45,9 +45,9 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-bold text-[#f59e0b] mb-4 tracking-wider">サポート</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><a href="#" className="hover:text-white transition">よくある質問</a></li>
-              <li><a href="#" className="hover:text-white transition">お問い合わせ</a></li>
-              <li><a href="#" className="hover:text-white transition">導入事例</a></li>
+              <li><a href="/faq" className="hover:text-white transition">よくある質問</a></li>
+              <li><a href="/contact" className="hover:text-white transition">お問い合わせ</a></li>
+              <li><a href="/cases" className="hover:text-white transition">導入事例</a></li>
             </ul>
           </div>
         </div>
