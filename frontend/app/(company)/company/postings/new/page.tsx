@@ -83,8 +83,14 @@ function NewPostingForm() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8">
-      <h1 className="text-2xl font-bold mb-1 text-[#0f172a]">求人作成</h1>
-      <p className="text-sm text-gray-500 mb-6">AI/MLエンジニアに最適化された求人を作成します。</p>
+      <div className="flex items-center gap-3 mb-1">
+        <h1 className="text-2xl font-bold text-[#0f172a]">求人作成</h1>
+        <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2.5 py-0.5 rounded-full text-xs font-bold border border-green-200">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+          無料・無制限
+        </span>
+      </div>
+      <p className="text-sm text-gray-500 mb-6">何件でも無料で投稿できます。AIが最適な候補者を自動でマッチングします。</p>
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">

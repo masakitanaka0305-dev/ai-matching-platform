@@ -7,11 +7,58 @@ export default function PricingPage() {
       <div className="text-center mb-12">
         <h1 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3">料金プラン</h1>
         <p className="text-gray-500 text-lg">
-          必要な時に必要な分だけ。初期費用・月額費用は一切かかりません。
+          まず無料で体験。価値を実感してから、必要な時だけ課金。
         </p>
       </div>
 
-      {/* Plans */}
+      {/* Free Tier */}
+      <div className="card p-6 sm:p-8 border-2 border-green-200 bg-green-50/30 mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-2xl bg-green-100 flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">ずっと無料で使える機能</h2>
+            <p className="text-sm text-green-700">登録するだけで今すぐ使えます</p>
+          </div>
+          <span className="ml-auto text-3xl font-black text-green-600">¥0</span>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" className="shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+            求人投稿（無制限・何件でも無料）
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" className="shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+            AIマッチング（自動スコアリング）
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" className="shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+            候補者の簡易プロフィール閲覧
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" className="shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+            AIスコア・スキルタグの確認
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" className="shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+            応募の受付・管理
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" className="shrink-0"><polyline points="20 6 9 17 4 12" /></svg>
+            求人の公開・非公開切替
+          </div>
+        </div>
+        <div className="mt-5">
+          <a href="/company/register" className="btn-primary px-6 py-3 text-sm">
+            無料で始める
+          </a>
+        </div>
+      </div>
+
+      {/* Paid Plans */}
+      <h2 className="text-xl font-bold text-gray-900 text-center mb-2">もっと成果を出したい時に</h2>
+      <p className="text-sm text-gray-500 text-center mb-6">候補者に直接アプローチする際にのみ費用が発生します</p>
       <div className="grid md:grid-cols-2 gap-6 mb-16">
         {/* Plan 1: 優先アプローチ権 */}
         <div className="card border-2 border-amber-200 relative overflow-hidden">

@@ -104,7 +104,10 @@ export default function CompanyDashboard() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900">企業ダッシュボード</h1>
-            <p className="text-sm text-gray-500 mt-1">マッチング状況と求人を管理</p>
+            <p className="text-sm text-gray-500 mt-1">
+              マッチング状況と求人を管理
+              <span className="ml-2 inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold border border-green-200">求人投稿 無料・無制限</span>
+            </p>
           </div>
           <a
             href="/company/register"

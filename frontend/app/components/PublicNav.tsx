@@ -4,6 +4,13 @@ function NavLinks() {
   return (
     <>
       <a
+        href="/jobs"
+        className="block py-2 md:py-0 text-sm font-medium text-gray-700 hover:text-[#4f46e5] transition relative group"
+      >
+        求人一覧
+        <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-[#4f46e5] transition-all group-hover:w-full hidden md:block" />
+      </a>
+      <a
         href="/engineer"
         className="block py-2 md:py-0 text-sm font-medium text-gray-700 hover:text-[#4f46e5] transition relative group"
       >

@@ -27,13 +27,16 @@ export default function Home() {
             AI人材に特化したマッチングプラットフォーム。
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5">
-            <a href="/engineer" className="btn-primary text-base px-8 sm:px-10 py-4">
-              エンジニア登録
+            <a href="/jobs" className="btn-primary text-base px-8 sm:px-10 py-4">
+              求人を見る
             </a>
             <a href="/diagnosis" className="btn-secondary text-base px-8 sm:px-10 py-4">
               無料で市場価値診断
             </a>
           </div>
+          <p className="mt-4 text-sm text-gray-400">
+            <a href="/company/register" className="text-indigo-500 hover:text-indigo-600 font-medium">企業の方はこちら</a> — 求人投稿は無料・無制限
+          </p>
         </div>
       </section>
 
@@ -353,11 +356,11 @@ export default function Home() {
             最適な企業との出会いが、ここから始まります。
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/engineer" className="btn-primary text-base px-10 py-4">
-              エンジニア登録（無料）
+            <a href="/jobs" className="btn-primary text-base px-10 py-4">
+              求人を見る（登録不要）
             </a>
             <a href="/company/register" className="btn-secondary text-base px-10 py-4">
-              企業の方はこちら
+              無料で求人を作成
             </a>
           </div>
         </div>
