@@ -253,9 +253,22 @@ async def reply_to_thread(
     db.commit()
     db.refresh(msg)
 
-    # Discord通知
+    # 企業へのメール・Discord通知
     posting = db.query(JobPosting).filter(JobPosting.id == match.posting_id).first()
     company = db.query(Company).filter(Company.id == posting.company_id).first() if posting else None
+
+    # メール通知（企業の担当者へ）
+    if company:
+        email_service.send_scout_notification(
+            engineer_email=company.contact_email,
+            engineer_name=company.contact_name,
+            company_name=engineer.name,
+            posting_title=posting.title if posting else "",
+            message_preview=payload.body,
+            match_id=str(match.id),
+        )
+
+    # Discord通知
     try:
         await notifier.notify_message_received(
             sender_type="engineer",

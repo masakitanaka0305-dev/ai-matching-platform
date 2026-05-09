@@ -8,12 +8,13 @@ from sqlalchemy.orm import Session
 
 from ..models import get_db, JobPosting, Company, ExperienceLevel
 from ..schemas.schemas import JobPostingCreate, JobPostingResponse
+from ..services.discord_notifier import notifier
 
 router = APIRouter(prefix="/postings", tags=["postings"])
 
 
 @router.post("", response_model=JobPostingResponse, status_code=201)
-def create_posting(payload: JobPostingCreate, db: Session = Depends(get_db)):
+async def create_posting(payload: JobPostingCreate, db: Session = Depends(get_db)):
     company = db.query(Company).filter(Company.id == str(payload.company_id)).first()
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
@@ -33,6 +34,17 @@ def create_posting(payload: JobPostingCreate, db: Session = Depends(get_db)):
     db.add(posting)
     db.commit()
     db.refresh(posting)
+
+    # Discord通知
+    try:
+        await notifier.notify_new_posting(
+            company_name=company.name,
+            posting_title=posting.title,
+            posting_id=str(posting.id),
+        )
+    except Exception:
+        pass
+
     return posting
 
 

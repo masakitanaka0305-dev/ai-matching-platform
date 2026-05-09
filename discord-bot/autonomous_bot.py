@@ -339,6 +339,9 @@ class DashboardUnit:
 
         proposed = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "proposed")
         unlocked = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "approach_unlocked")
+        scout_sent = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "scout_sent")
+        interested = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "engineer_interested")
+        interview = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "interview_scheduled")
         accepted = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "accepted")
         rejected = sum(1 for m in matches if isinstance(m, dict) and m.get("status") == "rejected")
 
@@ -352,15 +355,20 @@ class DashboardUnit:
         embed.add_field(name="🏢 企業", value=f"**{total_comp}**社", inline=True)
         embed.add_field(name="📝 求人", value=f"**{total_post}**件", inline=True)
         embed.add_field(name="🤝 マッチ合計", value=f"**{total_match}**件", inline=True)
-        embed.add_field(name="⏳ 保留中", value=f"**{proposed}**件", inline=True)
+
+        # 全パイプラインステージ
+        embed.add_field(name="📋 提案中", value=f"**{proposed}**件", inline=True)
         embed.add_field(name="🔓 解放済", value=f"**{unlocked}**件", inline=True)
+        embed.add_field(name="🚀 スカウト済", value=f"**{scout_sent}**件", inline=True)
+        embed.add_field(name="💡 興味あり", value=f"**{interested}**件", inline=True)
+        embed.add_field(name="📅 面談設定", value=f"**{interview}**件", inline=True)
         embed.add_field(name="✅ 成約", value=f"**{accepted}**件", inline=True)
 
-        # パイプライン
+        # パイプラインフロー
         if total_match > 0:
             cvr = (accepted / total_match * 100) if total_match else 0
-            pipeline = f"提案 {proposed} → 成約 {accepted} → 失注 {rejected}\n"
-            pipeline += f"**CVR: {cvr:.1f}%**"
+            pipeline = f"提案 {proposed} → 解放 {unlocked} → スカウト {scout_sent} → 興味 {interested} → 面談 {interview} → 成約 {accepted}\n"
+            pipeline += f"失注 {rejected} | **CVR: {cvr:.1f}%**"
             embed.add_field(name="📈 パイプライン", value=pipeline, inline=False)
 
         # 3択レポート
@@ -424,7 +432,7 @@ class DashboardActionView(ui.View):
                 return
             embed = discord.Embed(title="📋 最新マッチ一覧", color=0x5865F2)
             for m in matches[:10]:
-                status_emoji = {"proposed": "⏳", "accepted": "✅", "rejected": "❌", "approach_unlocked": "🔓", "company_reviewed": "👀"}.get(m.get("status", ""), "🔄")
+                status_emoji = {"proposed": "📋", "approach_unlocked": "🔓", "scout_sent": "🚀", "engineer_interested": "💡", "interview_scheduled": "📅", "accepted": "✅", "rejected": "❌", "company_reviewed": "👀", "withdrawn": "🚪"}.get(m.get("status", ""), "🔄")
                 embed.add_field(
                     name=f"{status_emoji} Score: {m.get('ai_score', 0):.0f}",
                     value=f"ID: `{m['id'][:8]}...` | Status: `{m['status']}`",

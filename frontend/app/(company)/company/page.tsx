@@ -216,6 +216,20 @@ export default function CompanyDashboard() {
     router.push(`/company/approval/${matchId}`);
   };
 
+  const handleSuccessFee = async (matchId: string) => {
+    if (!companyId) {
+      alert("企業IDが見つかりません。");
+      return;
+    }
+    try {
+      const { paymentApi } = await import("@/lib/api");
+      const result = await paymentApi.createCheckout(companyId, matchId);
+      window.location.href = result.checkout_url;
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "成功報酬決済の開始に失敗しました");
+    }
+  };
+
   const handleDeactivate = async (postingId: string) => {
     try {
       await postingApi.deactivate(postingId);
@@ -634,6 +648,14 @@ export default function CompanyDashboard() {
                               className="text-xs bg-green-600 text-white px-3 py-1 rounded-lg font-bold hover:bg-green-700 transition"
                             >
                               成約
+                            </button>
+                          )}
+                          {m.status === "accepted" && (
+                            <button
+                              onClick={() => handleSuccessFee(m.id)}
+                              className="text-xs bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-3 py-1 rounded-lg font-bold hover:from-amber-600 hover:to-yellow-600 transition shadow-sm"
+                            >
+                              成功報酬を決済（¥500,000）
                             </button>
                           )}
                           {!["accepted", "rejected", "withdrawn"].includes(m.status) && (

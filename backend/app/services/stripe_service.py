@@ -351,6 +351,43 @@ class StripeService:
                     except Exception:
                         pass
 
+        # success_fee 決済完了 → 成約確定 + Discord通知
+        if payment_type == "success_fee":
+            match_id = metadata.get("match_id")
+            if match_id:
+                match = db.query(Match).filter(Match.id == match_id).first()
+                if match:
+                    match.resolved_at = datetime.utcnow()
+
+                    # イベントログ
+                    event = MatchEvent(
+                        match_id=match.id,
+                        event_type="success_fee_paid",
+                        old_value=match.status.value,
+                        new_value="accepted",
+                        actor="stripe_webhook",
+                        detail={"payment_id": payment_id},
+                    )
+                    db.add(event)
+                    db.commit()
+
+                    # Discord通知
+                    try:
+                        from .discord_notifier import notifier
+                        import asyncio
+                        engineer = match.engineer
+                        company = match.posting.company
+                        asyncio.get_event_loop().create_task(
+                            notifier.notify_success_fee_paid(
+                                company_name=company.name,
+                                engineer_name=engineer.name,
+                                amount=match.posting.company and settings.success_fee_amount or 500000,
+                                match_id=str(match.id),
+                            )
+                        )
+                    except Exception:
+                        pass
+
         return {"status": "processed", "type": "checkout.session.completed"}
 
     def _handle_payment_succeeded(self, intent: dict, db: Session) -> dict:

@@ -319,6 +319,52 @@ class DiscordNotifier:
         target = channel_id or self.channel_id
         return await self._send_message(target, embed)
 
+    async def notify_new_posting(
+        self,
+        company_name: str,
+        posting_title: str,
+        posting_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """求人作成通知"""
+        embed = {
+            "title": "📝 新規求人作成",
+            "color": 0x2ECC71,
+            "fields": [
+                {"name": "企業", "value": company_name, "inline": True},
+                {"name": "ポジション", "value": posting_title, "inline": True},
+                {"name": "Posting ID", "value": f"`{posting_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform — 自動マッチング対象に追加"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
+    async def notify_success_fee_paid(
+        self,
+        company_name: str,
+        engineer_name: str,
+        amount: int,
+        match_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """成功報酬決済完了通知"""
+        embed = {
+            "title": "🎊 成功報酬 決済完了",
+            "color": 0xFFD700,
+            "fields": [
+                {"name": "企業", "value": company_name, "inline": True},
+                {"name": "候補者", "value": engineer_name, "inline": True},
+                {"name": "金額", "value": f"¥{amount:,}", "inline": True},
+                {"name": "Match ID", "value": f"`{match_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform — 成約プロセス完了"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
     async def _send_to_channel(self, content: str, channel_id: str | None = None):
         """テキストメッセージをチャンネルに送信（スケジューラ用）"""
         target = channel_id or self.channel_id
