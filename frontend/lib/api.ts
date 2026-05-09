@@ -46,10 +46,10 @@ export interface EngineerCreate {
 
 export const engineerApi = {
   list: (params?: { open_only?: boolean }) =>
-    request<Engineer[]>(`/engineers/?open_only=${params?.open_only ?? true}`),
+    request<Engineer[]>(`/engineers?open_only=${params?.open_only ?? true}`),
   get: (id: string) => request<Engineer>(`/engineers/${id}`),
   create: (data: EngineerCreate) =>
-    request<Engineer>("/engineers/", { method: "POST", body: JSON.stringify(data) }),
+    request<Engineer>("/engineers", { method: "POST", body: JSON.stringify(data) }),
 };
 
 // ------------------------------------------------------------------
@@ -75,10 +75,10 @@ export interface CompanyCreate {
 }
 
 export const companyApi = {
-  list: () => request<Company[]>("/companies/"),
+  list: () => request<Company[]>("/companies"),
   get: (id: string) => request<Company>(`/companies/${id}`),
   create: (data: CompanyCreate) =>
-    request<Company>("/companies/", { method: "POST", body: JSON.stringify(data) }),
+    request<Company>("/companies", { method: "POST", body: JSON.stringify(data) }),
 };
 
 // ------------------------------------------------------------------
@@ -111,11 +111,11 @@ export const postingApi = {
     const sp = new URLSearchParams();
     if (params?.active_only !== undefined) sp.set("active_only", String(params.active_only));
     if (params?.company_id) sp.set("company_id", params.company_id);
-    return request<JobPosting[]>(`/postings/?${sp.toString()}`);
+    return request<JobPosting[]>(`/postings?${sp.toString()}`);
   },
   get: (id: string) => request<JobPosting>(`/postings/${id}`),
   create: (data: JobPostingCreate) =>
-    request<JobPosting>("/postings/", { method: "POST", body: JSON.stringify(data) }),
+    request<JobPosting>("/postings", { method: "POST", body: JSON.stringify(data) }),
   deactivate: (id: string) =>
     request<{ status: string }>(`/postings/${id}/deactivate`, { method: "PATCH" }),
 };
@@ -136,7 +136,7 @@ export interface Match {
 
 export const matchApi = {
   list: (status?: string) =>
-    request<Match[]>(`/matches/?status=${status || ""}`),
+    request<Match[]>(`/matches?status=${status || ""}`),
   get: (id: string) => request<Match>(`/matches/${id}`),
   updateStatus: (id: string, status: string, reason?: string) =>
     request<Match>(`/matches/${id}/status`, {
@@ -299,7 +299,7 @@ export interface DiagnosisPaidReport extends DiagnosisFreeReport {
 
 export const diagnosisApi = {
   create: (engineerId: string, questionnaire: Record<string, string>) =>
-    request<DiagnosisResult>("/diagnosis/", {
+    request<DiagnosisResult>("/diagnosis", {
       method: "POST",
       body: JSON.stringify({ engineer_id: engineerId, questionnaire }),
     }),
