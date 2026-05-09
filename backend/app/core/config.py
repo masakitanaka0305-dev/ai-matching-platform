@@ -21,6 +21,15 @@ class Settings(BaseSettings):
     success_fee_amount: int = 500000  # 50万円（成功報酬デフォルト）
     scout_approach_amount: int = 30000  # 3万円（優先アプローチ権）
 
+    # Email (SMTP)
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from_email: str = "noreply@ai-matching.jp"
+    smtp_from_name: str = "AI Matching Platform"
+    frontend_url: str = "https://perceptive-recreation-production-f993.up.railway.app"
+
     # External
     openai_api_key: str = ""  # スコアリング用（将来的にClaude APIに移行可）
 

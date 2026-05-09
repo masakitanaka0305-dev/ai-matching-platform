@@ -257,6 +257,89 @@ export const scoutApproachApi = {
 };
 
 // ------------------------------------------------------------------
+// Scout / Inbox / Interview
+// ------------------------------------------------------------------
+export interface InboxMessage {
+  id: string;
+  match_id: string;
+  sender_type: "company" | "engineer";
+  sender_name: string;
+  subject?: string;
+  body: string;
+  read_at: string | null;
+  created_at: string;
+  company_name?: string;
+  posting_title?: string;
+  ai_score?: number;
+}
+
+export interface InterviewSchedule {
+  id: string;
+  match_id: string;
+  proposed_by: string;
+  proposed_times: { datetime: string; duration_min?: number }[];
+  selected_time: string | null;
+  status: string;
+  location?: string;
+  meeting_url?: string;
+  notes?: string;
+  created_at: string;
+}
+
+export const scoutApi = {
+  send: (companyId: string, matchId: string, subject: string, body: string) =>
+    request<{ message_id: string; status: string; email_sent: boolean }>(
+      "/scouts/send",
+      {
+        method: "POST",
+        body: JSON.stringify({ company_id: companyId, match_id: matchId, subject, body }),
+      }
+    ),
+};
+
+export const inboxApi = {
+  list: (engineerId: string) =>
+    request<InboxMessage[]>(`/scouts/inbox/${engineerId}`),
+  thread: (matchId: string) =>
+    request<InboxMessage[]>(`/scouts/thread/${matchId}`),
+  markRead: (messageId: string) =>
+    request<{ status: string }>(`/scouts/messages/${messageId}/read`, { method: "PATCH" }),
+  reply: (matchId: string, engineerId: string, body: string) =>
+    request<{ message_id: string; status: string }>(
+      `/scouts/thread/${matchId}/reply`,
+      {
+        method: "POST",
+        body: JSON.stringify({ engineer_id: engineerId, body }),
+      }
+    ),
+};
+
+export const interviewApi = {
+  propose: (
+    matchId: string,
+    proposedBy: string,
+    proposedTimes: { datetime: string; duration_min?: number }[],
+    opts?: { location?: string; meeting_url?: string; notes?: string }
+  ) =>
+    request<InterviewSchedule>("/scouts/interviews", {
+      method: "POST",
+      body: JSON.stringify({
+        match_id: matchId,
+        proposed_by: proposedBy,
+        proposed_times: proposedTimes,
+        ...opts,
+      }),
+    }),
+  select: (interviewId: string, selectedTime: string, meetingUrl?: string) =>
+    request<InterviewSchedule>(`/scouts/interviews/${interviewId}/select`, {
+      method: "PATCH",
+      body: JSON.stringify({ selected_time: selectedTime, meeting_url: meetingUrl }),
+    }),
+  listForMatch: (matchId: string) =>
+    request<InterviewSchedule[]>(`/scouts/interviews/match/${matchId}`),
+};
+
+// ------------------------------------------------------------------
 // Matching Engine
 // ------------------------------------------------------------------
 export const matchingApi = {

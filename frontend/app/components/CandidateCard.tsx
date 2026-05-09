@@ -7,6 +7,7 @@ import {
   type EngagementInsight,
   type FollowupStatus,
   engagementApi,
+  scoutApi,
 } from "@/lib/api";
 
 interface CandidateCardProps {
@@ -20,6 +21,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   proposed: { label: "提案中", color: "bg-blue-50 text-blue-700 border-blue-200" },
   company_reviewed: { label: "確認済", color: "bg-amber-50 text-amber-700 border-amber-200" },
   approach_unlocked: { label: "アプローチ権解放済", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+  scout_sent: { label: "スカウト送信済", color: "bg-violet-50 text-violet-700 border-violet-200" },
   engineer_interested: { label: "興味あり", color: "bg-purple-50 text-purple-700 border-purple-200" },
   interview_scheduled: { label: "面談設定", color: "bg-cyan-50 text-cyan-700 border-cyan-200" },
   accepted: { label: "成約", color: "bg-green-50 text-green-700 border-green-200" },
@@ -69,8 +71,8 @@ export default function CandidateCard({ match, companyId, onUnlock, onApprovalPd
     if (!companyId || !approachBody.trim()) return;
     setSending(true);
     try {
-      const result = await engagementApi.sendApproach(match.id, companyId, approachSubject, approachBody);
-      setSuggestions(result.suggestions);
+      // Use scoutApi for first message (email + Discord notifications)
+      await scoutApi.send(companyId, match.id, approachSubject, approachBody);
       setSent(true);
     } catch {
       alert("送信に失敗しました");

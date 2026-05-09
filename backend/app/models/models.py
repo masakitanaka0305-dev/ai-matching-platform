@@ -59,6 +59,7 @@ class MatchStatus(str, PyEnum):
     proposed = "proposed"
     company_reviewed = "company_reviewed"
     approach_unlocked = "approach_unlocked"
+    scout_sent = "scout_sent"
     engineer_interested = "engineer_interested"
     interview_scheduled = "interview_scheduled"
     accepted = "accepted"
@@ -357,5 +358,26 @@ class EngagementInsight(Base):
     content = Column(Text, nullable=False)
     confidence = Column(Numeric(3, 2), default=0.8)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    match = relationship("Match")
+
+
+# ---------------------------------------------------------------------------
+# 面談日程調整
+# ---------------------------------------------------------------------------
+class InterviewSchedule(Base):
+    __tablename__ = "interview_schedules"
+
+    id = Column(String(36), primary_key=True, default=_uuid)
+    match_id = Column(String(36), ForeignKey("matches.id", ondelete="CASCADE"), nullable=False)
+    proposed_by = Column(String(20), nullable=False)  # "company" or "engineer"
+    proposed_times = Column(JSONType, nullable=False)  # [{"datetime": "...", "duration_min": 60}]
+    selected_time = Column(DateTime, nullable=True)
+    status = Column(String(20), default="proposed")  # proposed, confirmed, cancelled
+    location = Column(String(500), nullable=True)
+    meeting_url = Column(String(500), nullable=True)
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     match = relationship("Match")

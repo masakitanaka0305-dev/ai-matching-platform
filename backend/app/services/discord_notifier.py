@@ -84,6 +84,8 @@ class DiscordNotifier:
         status_emoji = {
             "proposed": "📋",
             "company_reviewed": "👀",
+            "approach_unlocked": "🔓",
+            "scout_sent": "🚀",
             "engineer_interested": "💡",
             "interview_scheduled": "📅",
             "accepted": "🎉",
@@ -217,6 +219,102 @@ class DiscordNotifier:
             ],
             "timestamp": datetime.utcnow().isoformat(),
             "footer": {"text": "AI Matching Platform — 技術鑑定書生成完了"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
+    async def notify_scout_sent(
+        self,
+        company_name: str,
+        engineer_name: str,
+        posting_title: str,
+        match_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """スカウト送信通知"""
+        embed = {
+            "title": "🚀 スカウト送信",
+            "color": 0x8B5CF6,
+            "fields": [
+                {"name": "企業", "value": company_name, "inline": True},
+                {"name": "候補者", "value": engineer_name, "inline": True},
+                {"name": "ポジション", "value": posting_title, "inline": False},
+                {"name": "Match ID", "value": f"`{match_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform — スカウト送信完了"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
+    async def notify_message_received(
+        self,
+        sender_type: str,
+        sender_name: str,
+        recipient_name: str,
+        match_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """メッセージ受信通知"""
+        emoji = "💬" if sender_type == "engineer" else "📨"
+        embed = {
+            "title": f"{emoji} メッセージ受信",
+            "color": 0x06B6D4,
+            "fields": [
+                {"name": "送信者", "value": f"{sender_name}（{sender_type}）", "inline": True},
+                {"name": "宛先", "value": recipient_name, "inline": True},
+                {"name": "Match ID", "value": f"`{match_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
+    async def notify_interview_proposed(
+        self,
+        proposer_name: str,
+        other_name: str,
+        times_count: int,
+        match_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """面談日程提案通知"""
+        embed = {
+            "title": "📅 面談日程提案",
+            "color": 0x0EA5E9,
+            "fields": [
+                {"name": "提案者", "value": proposer_name, "inline": True},
+                {"name": "相手", "value": other_name, "inline": True},
+                {"name": "候補日数", "value": f"{times_count}件", "inline": True},
+                {"name": "Match ID", "value": f"`{match_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform"},
+        }
+        target = channel_id or self.channel_id
+        return await self._send_message(target, embed)
+
+    async def notify_interview_confirmed(
+        self,
+        engineer_name: str,
+        company_name: str,
+        selected_time: str,
+        match_id: str,
+        channel_id: Optional[str] = None,
+    ):
+        """面談確定通知"""
+        embed = {
+            "title": "✅ 面談確定",
+            "color": 0x10B981,
+            "fields": [
+                {"name": "企業", "value": company_name, "inline": True},
+                {"name": "候補者", "value": engineer_name, "inline": True},
+                {"name": "日時", "value": selected_time, "inline": False},
+                {"name": "Match ID", "value": f"`{match_id}`", "inline": False},
+            ],
+            "timestamp": datetime.utcnow().isoformat(),
+            "footer": {"text": "AI Matching Platform — 面談スケジュール確定"},
         }
         target = channel_id or self.channel_id
         return await self._send_message(target, embed)

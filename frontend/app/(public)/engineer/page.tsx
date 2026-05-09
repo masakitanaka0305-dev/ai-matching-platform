@@ -45,7 +45,9 @@ export default function EngineerRegistration() {
     e.preventDefault();
     setError("");
     try {
-      await engineerApi.create(form);
+      const result = await engineerApi.create(form);
+      localStorage.setItem("engineer_id", result.id);
+      localStorage.setItem("engineer_name", form.name);
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "登録に失敗しました");
@@ -68,9 +70,14 @@ export default function EngineerRegistration() {
             <br />
             マッチングが見つかり次第ご連絡いたします。
           </p>
-          <a href="/diagnosis" className="btn-primary px-6 py-3">
-            無料で市場価値を診断する
-          </a>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a href="/engineer/inbox" className="btn-primary px-6 py-3">
+              インボックスを開く
+            </a>
+            <a href="/diagnosis" className="btn-secondary px-6 py-3">
+              無料で市場価値を診断する
+            </a>
+          </div>
         </div>
       </div>
     );

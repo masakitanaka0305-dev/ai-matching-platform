@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api import engineers, companies, matches, matching, payments, postings, diagnosis, reports
+from .api import engineers, companies, matches, matching, payments, postings, diagnosis, reports, scouts
 from .core.config import settings
 from .models.database import engine, Base
 
@@ -50,6 +50,7 @@ app.include_router(payments.router, prefix="/api/v1")
 app.include_router(postings.router, prefix="/api/v1")
 app.include_router(diagnosis.router, prefix="/api/v1")
 app.include_router(reports.router, prefix="/api/v1")
+app.include_router(scouts.router, prefix="/api/v1")
 
 
 @app.get("/health")

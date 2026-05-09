@@ -166,6 +166,62 @@ class ScoutApproachCheckoutResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # Diagnosis
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Scout / Inbox / Interview
+# ---------------------------------------------------------------------------
+class ScoutSendRequest(BaseModel):
+    company_id: UUID
+    match_id: UUID
+    subject: str
+    body: str
+
+class ScoutSendResponse(BaseModel):
+    message_id: str
+    status: str
+    email_sent: bool
+
+class InboxMessageResponse(BaseModel):
+    id: str
+    match_id: str
+    sender_type: str
+    sender_name: str
+    subject: Optional[str] = None
+    body: str
+    read_at: Optional[str] = None
+    created_at: str
+    company_name: Optional[str] = None
+    posting_title: Optional[str] = None
+    ai_score: Optional[float] = None
+
+class InboxReplyRequest(BaseModel):
+    body: str
+    engineer_id: UUID
+
+class InterviewProposeRequest(BaseModel):
+    match_id: UUID
+    proposed_by: str  # "company" or "engineer"
+    proposed_times: list[dict]
+    location: Optional[str] = None
+    meeting_url: Optional[str] = None
+    notes: Optional[str] = None
+
+class InterviewSelectRequest(BaseModel):
+    selected_time: str
+    meeting_url: Optional[str] = None
+
+class InterviewResponse(BaseModel):
+    id: str
+    match_id: str
+    proposed_by: str
+    proposed_times: list[dict]
+    selected_time: Optional[str] = None
+    status: str
+    location: Optional[str] = None
+    meeting_url: Optional[str] = None
+    notes: Optional[str] = None
+    created_at: str
+
+
 class DiagnosisRequest(BaseModel):
     engineer_id: UUID
     questionnaire: dict  # フロントから送られる回答JSON
