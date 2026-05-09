@@ -146,6 +146,76 @@ export const matchApi = {
 };
 
 // ------------------------------------------------------------------
+// Company Matches (マスキング対応)
+// ------------------------------------------------------------------
+export interface MaskedCandidate {
+  initials: string;
+  experience_level: string;
+  years_of_experience: number;
+  ai_specialties: string[];
+  skill_tags: string[];
+  work_style: string;
+}
+
+export interface UnlockedCandidate extends MaskedCandidate {
+  name: string;
+  email: string;
+  phone?: string;
+  github_url?: string;
+  linkedin_url?: string;
+  desired_salary_min?: number;
+  desired_salary_max?: number;
+  bio?: string;
+  current_company?: string;
+  current_role?: string;
+  pitch_to_company?: string;
+}
+
+export interface CompanyMatch {
+  id: string;
+  posting_id: string;
+  posting_title: string;
+  ai_score: number;
+  skill_match_rate?: number;
+  culture_fit_score?: number;
+  status: string;
+  is_unlocked: boolean;
+  proposed_at: string;
+  candidate: MaskedCandidate | UnlockedCandidate;
+  assessment_report?: Record<string, unknown>;
+}
+
+export interface ApprovalData {
+  match_id: string;
+  company: { name: string; industry: string | null };
+  posting: { title: string; salary_min: number | null; salary_max: number | null };
+  candidate: { name: string; experience_level: string; years_of_experience: number; ai_specialties: string[]; skills: string[] };
+  ai_evaluation: { total_score: number; skill_match_rate: number; level: string };
+  cost_comparison: { approach_fee: number; approach_fee_label: string; typical_agent_fee: string; saving_note: string };
+  roi_estimate: { salary_estimate: { min: number; max: number; median: number; unit: string }; note: string };
+  assessment_report: Record<string, unknown>;
+  generated_at: string | null;
+}
+
+export const companyMatchApi = {
+  list: (companyId: string, status?: string) =>
+    request<CompanyMatch[]>(`/matches/company/${companyId}?status=${status || ""}`),
+};
+
+export const scoutApproachApi = {
+  createCheckout: (companyId: string, matchId: string) =>
+    request<{ checkout_url: string; session_id: string; payment_id: string }>(
+      "/payments/checkout/scout-approach",
+      {
+        method: "POST",
+        body: JSON.stringify({ company_id: companyId, match_id: matchId }),
+      }
+    ),
+  getApprovalData: (matchId: string, companyId: string) =>
+    request<ApprovalData>(`/payments/approval/${matchId}?company_id=${companyId}`),
+};
+
+// ------------------------------------------------------------------
 // Matching Engine
 // ------------------------------------------------------------------
 export const matchingApi = {

@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""
     success_fee_amount: int = 500000  # 50万円（成功報酬デフォルト）
+    scout_approach_amount: int = 30000  # 3万円（優先アプローチ権）
 
     # External
     openai_api_key: str = ""  # スコアリング用（将来的にClaude APIに移行可）

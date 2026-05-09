@@ -34,6 +34,7 @@ export default function CompanyRegisterPage() {
     setError("");
     try {
       const company = await companyApi.create(form);
+      localStorage.setItem("company_id", company.id);
       setCompanyId(company.id);
       setSubmitted(true);
     } catch (err) {

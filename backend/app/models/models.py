@@ -58,6 +58,7 @@ class ArrayType(TypeDecorator):
 class MatchStatus(str, PyEnum):
     proposed = "proposed"
     company_reviewed = "company_reviewed"
+    approach_unlocked = "approach_unlocked"
     engineer_interested = "engineer_interested"
     interview_scheduled = "interview_scheduled"
     accepted = "accepted"
@@ -246,6 +247,10 @@ class Match(Base):
 
     pitch_to_engineer = Column(Text, nullable=True)
     pitch_to_company = Column(Text, nullable=True)
+
+    is_unlocked = Column(Boolean, default=False, nullable=False)
+    unlocked_at = Column(DateTime, nullable=True)
+    assessment_report = Column(JSONType, nullable=True)
 
     rejection_reason = Column(Text, nullable=True)
     notes = Column(Text, nullable=True)

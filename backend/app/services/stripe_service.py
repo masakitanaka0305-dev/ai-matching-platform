@@ -15,7 +15,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from ..core.config import settings
-from ..models.models import Payment, PaymentStatus, Company, Match, MatchStatus
+from ..models.models import Payment, PaymentStatus, Company, Match, MatchEvent, MatchStatus
 
 try:
     import stripe
@@ -156,6 +156,72 @@ class StripeService:
         }
 
     # ------------------------------------------------------------------
+    # 優先アプローチ権 Checkout
+    # ------------------------------------------------------------------
+    async def create_scout_approach_checkout(
+        self,
+        company: Company,
+        match: Match,
+        db: Session,
+        amount: Optional[int] = None,
+        success_url: Optional[str] = None,
+        cancel_url: Optional[str] = None,
+    ) -> dict:
+        """優先アプローチ権の解放（技術鑑定書付）Checkout Session を作成。"""
+        base = _frontend_url()
+        success_url = success_url or f"{base}/payment/success"
+        cancel_url = cancel_url or f"{base}/payment/cancel"
+
+        fee = amount or settings.scout_approach_amount
+        customer_id = await self.get_or_create_customer(company, db)
+
+        payment = Payment(
+            company_id=company.id,
+            match_id=match.id,
+            amount=fee,
+            payment_type="scout_approach",
+            status=PaymentStatus.pending,
+            description=f"優先アプローチ権の解放 - Match {str(match.id)[:8]}",
+        )
+        db.add(payment)
+        db.commit()
+        db.refresh(payment)
+
+        session = stripe.checkout.Session.create(
+            customer=customer_id,
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": "jpy",
+                    "product_data": {
+                        "name": "優先アプローチ権の解放（技術鑑定書付）",
+                        "description": f"候補者マッチ ID: {str(match.id)[:8]}",
+                    },
+                    "unit_amount": fee,
+                },
+                "quantity": 1,
+            }],
+            mode="payment",
+            success_url=success_url + "?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=cancel_url,
+            metadata={
+                "payment_id": str(payment.id),
+                "match_id": str(match.id),
+                "company_id": str(company.id),
+                "type": "scout_approach",
+            },
+        )
+
+        payment.stripe_payment_intent_id = session.payment_intent
+        db.commit()
+
+        return {
+            "checkout_url": session.url,
+            "session_id": session.id,
+            "payment_id": str(payment.id),
+        }
+
+    # ------------------------------------------------------------------
     # 診断レポート購入
     # ------------------------------------------------------------------
     async def create_diagnosis_checkout(
@@ -222,6 +288,7 @@ class StripeService:
     def _handle_checkout_completed(self, session: dict, db: Session) -> dict:
         metadata = session.get("metadata", {})
         payment_id = metadata.get("payment_id")
+        payment_type = metadata.get("type")
 
         if payment_id:
             payment = db.query(Payment).filter(Payment.id == payment_id).first()
@@ -231,6 +298,34 @@ class StripeService:
                 payment.stripe_payment_intent_id = session.get("payment_intent")
                 payment.invoice_url = session.get("invoice")
                 db.commit()
+
+        # scout_approach 決済完了 → アプローチ権解放 + 技術鑑定書生成
+        if payment_type == "scout_approach":
+            match_id = metadata.get("match_id")
+            if match_id:
+                match = db.query(Match).filter(Match.id == match_id).first()
+                if match and not match.is_unlocked:
+                    from .assessment_service import assessment_service
+
+                    match.is_unlocked = True
+                    match.unlocked_at = datetime.utcnow()
+                    match.status = MatchStatus.approach_unlocked
+
+                    # 技術鑑定書生成
+                    report = assessment_service.generate_report(match, db)
+                    match.assessment_report = report
+
+                    # イベントログ
+                    event = MatchEvent(
+                        match_id=match.id,
+                        event_type="approach_unlocked",
+                        old_value="company_reviewed",
+                        new_value="approach_unlocked",
+                        actor="stripe_webhook",
+                        detail={"payment_id": payment_id},
+                    )
+                    db.add(event)
+                    db.commit()
 
         return {"status": "processed", "type": "checkout.session.completed"}
 

@@ -1,27 +1,27 @@
 export default function Home() {
   return (
     <div className="space-y-0">
-      {/* Hero */}
-      <section className="relative bg-[#0f172a] overflow-hidden">
+      {/* Hero — ホワイトベース */}
+      <section className="relative bg-white overflow-hidden">
         {/* Grid Pattern */}
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+              "linear-gradient(rgba(79,70,229,.2) 1px, transparent 1px), linear-gradient(90deg, rgba(79,70,229,.2) 1px, transparent 1px)",
             backgroundSize: "40px 40px",
           }}
         />
         {/* Radial Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#4f46e5] opacity-[0.08] blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-indigo-500 opacity-[0.05] blur-[120px]" />
 
         <div className="relative max-w-5xl mx-auto text-center py-20 sm:py-28 px-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight text-gray-900">
             AI/MLエンジニア専門
             <br />
-            <span className="gradient-text">マッチング</span>
+            <span className="bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent">マッチング</span>
           </h1>
-          <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
             1,200名以上のAI/MLエンジニアと300社以上の企業が利用する、
             <br className="hidden sm:block" />
             AI人材に特化したマッチングプラットフォーム。
@@ -30,7 +30,7 @@ export default function Home() {
             <a href="/engineer" className="btn-primary text-base px-8 sm:px-10 py-4">
               エンジニア登録
             </a>
-            <a href="/diagnosis" className="btn-secondary !text-white !border-white/30 hover:!bg-white/10 text-base px-8 sm:px-10 py-4">
+            <a href="/diagnosis" className="btn-secondary text-base px-8 sm:px-10 py-4">
               無料で市場価値診断
             </a>
           </div>
@@ -104,7 +104,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-bold mb-2 text-[#0f172a]">AI分析＆マッチング</h3>
               <p className="text-sm text-gray-600 mb-3">
-                あなたのスキルと企業の技術要件をAIが多次元分析。適合度の高い企業から優先的にスカウトが届きます。
+                あなたのスキルと企業の技術要件をAIが多次元分析。適合度の高い企業から優先アプローチが届きます。
               </p>
               <ul className="text-sm text-gray-500 space-y-1">
                 <li className="flex items-center gap-1.5">
@@ -339,15 +339,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 最終CTA */}
-      <section className="relative bg-[#0f172a] overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-[#4f46e5] opacity-[0.06] blur-[100px]" />
+      {/* 最終CTA — ホワイトベース */}
+      <section className="relative bg-white overflow-hidden border-t border-gray-100">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-indigo-500 opacity-[0.04] blur-[100px]" />
         <div className="relative max-w-3xl mx-auto text-center py-16 sm:py-24 px-4">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
             あなたのキャリアを、
-            <span className="gradient-text">次のステージへ。</span>
+            <span className="bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent">次のステージへ。</span>
           </h2>
-          <p className="text-gray-400 mb-10 leading-relaxed">
+          <p className="text-gray-500 mb-10 leading-relaxed">
             AI/MLエンジニアとしての市場価値を無料で診断。
             <br className="hidden sm:block" />
             最適な企業との出会いが、ここから始まります。
@@ -356,7 +356,7 @@ export default function Home() {
             <a href="/engineer" className="btn-primary text-base px-10 py-4">
               エンジニア登録（無料）
             </a>
-            <a href="/company/register" className="btn-secondary !text-[#f59e0b] !border-[#f59e0b]/40 hover:!bg-[#f59e0b]/10 text-base px-10 py-4">
+            <a href="/company/register" className="btn-secondary text-base px-10 py-4">
               企業の方はこちら
             </a>
           </div>

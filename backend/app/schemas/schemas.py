@@ -112,6 +112,58 @@ class MatchStatusUpdate(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Company Match (マスキング / 解放済み)
+# ---------------------------------------------------------------------------
+class MaskedCandidateInfo(BaseModel):
+    initials: str
+    experience_level: str
+    years_of_experience: int
+    ai_specialties: list[str]
+    skill_tags: list[str]
+    work_style: str
+
+class UnlockedCandidateInfo(MaskedCandidateInfo):
+    name: str
+    email: str
+    phone: Optional[str] = None
+    github_url: Optional[str] = None
+    linkedin_url: Optional[str] = None
+    desired_salary_min: Optional[int] = None
+    desired_salary_max: Optional[int] = None
+    bio: Optional[str] = None
+    current_company: Optional[str] = None
+    current_role: Optional[str] = None
+    pitch_to_company: Optional[str] = None
+
+class CompanyMatchResponse(BaseModel):
+    id: str
+    posting_id: str
+    posting_title: str
+    ai_score: float
+    skill_match_rate: Optional[float] = None
+    culture_fit_score: Optional[float] = None
+    status: str
+    is_unlocked: bool
+    proposed_at: str
+    candidate: MaskedCandidateInfo | UnlockedCandidateInfo
+    assessment_report: Optional[dict] = None
+
+
+# ---------------------------------------------------------------------------
+# Scout Approach Checkout
+# ---------------------------------------------------------------------------
+class ScoutApproachCheckoutRequest(BaseModel):
+    company_id: UUID
+    match_id: UUID
+
+
+class ScoutApproachCheckoutResponse(BaseModel):
+    checkout_url: str
+    session_id: str
+    payment_id: str
+
+
+# ---------------------------------------------------------------------------
 # Diagnosis
 # ---------------------------------------------------------------------------
 class DiagnosisRequest(BaseModel):
