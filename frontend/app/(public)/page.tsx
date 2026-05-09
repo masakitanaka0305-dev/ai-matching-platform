@@ -27,8 +27,8 @@ export default function Home() {
             AI人材に特化したマッチングプラットフォーム。
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5">
-            <a href="/jobs" className="btn-primary text-base px-8 sm:px-10 py-4">
-              求人を見る
+            <a href="/engineer" className="btn-primary text-base px-8 sm:px-10 py-4">
+              エンジニア登録（無料）
             </a>
             <a href="/diagnosis" className="btn-secondary text-base px-8 sm:px-10 py-4">
               無料で市場価値診断
@@ -356,8 +356,8 @@ export default function Home() {
             最適な企業との出会いが、ここから始まります。
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/jobs" className="btn-primary text-base px-10 py-4">
-              求人を見る（登録不要）
+            <a href="/engineer" className="btn-primary text-base px-10 py-4">
+              エンジニア登録してスカウトを受け取る
             </a>
             <a href="/company/register" className="btn-secondary text-base px-10 py-4">
               無料で求人を作成
