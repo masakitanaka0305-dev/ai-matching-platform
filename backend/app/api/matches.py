@@ -99,7 +99,7 @@ def list_company_matches(
     return results
 
 
-@router.get("/", response_model=List[MatchResponse])
+@router.get("", response_model=List[MatchResponse])
 def list_matches(
     status: Optional[str] = None,
     skip: int = 0,

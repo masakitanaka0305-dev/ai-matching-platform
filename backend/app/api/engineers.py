@@ -12,7 +12,7 @@ from ..services.discord_notifier import notifier
 router = APIRouter(prefix="/engineers", tags=["engineers"])
 
 
-@router.post("/", response_model=EngineerResponse, status_code=201)
+@router.post("", response_model=EngineerResponse, status_code=201)
 async def create_engineer(payload: EngineerCreate, db: Session = Depends(get_db)):
     engineer = Engineer(
         name=payload.name,
@@ -47,7 +47,7 @@ async def create_engineer(payload: EngineerCreate, db: Session = Depends(get_db)
     return engineer
 
 
-@router.get("/", response_model=list[EngineerResponse])
+@router.get("", response_model=list[EngineerResponse])
 def list_engineers(
     skip: int = 0,
     limit: int = 20,

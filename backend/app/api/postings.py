@@ -12,7 +12,7 @@ from ..schemas.schemas import JobPostingCreate, JobPostingResponse
 router = APIRouter(prefix="/postings", tags=["postings"])
 
 
-@router.post("/", response_model=JobPostingResponse, status_code=201)
+@router.post("", response_model=JobPostingResponse, status_code=201)
 def create_posting(payload: JobPostingCreate, db: Session = Depends(get_db)):
     company = db.query(Company).filter(Company.id == str(payload.company_id)).first()
     if not company:
@@ -36,7 +36,7 @@ def create_posting(payload: JobPostingCreate, db: Session = Depends(get_db)):
     return posting
 
 
-@router.get("/", response_model=List[JobPostingResponse])
+@router.get("", response_model=List[JobPostingResponse])
 def list_postings(
     active_only: bool = True,
     company_id: Optional[str] = None,

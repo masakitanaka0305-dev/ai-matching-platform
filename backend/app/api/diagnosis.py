@@ -12,7 +12,7 @@ from ..services.diagnosis_service import diagnosis_service
 router = APIRouter(prefix="/diagnosis", tags=["diagnosis"])
 
 
-@router.post("/", response_model=DiagnosisResponse, status_code=201)
+@router.post("", response_model=DiagnosisResponse, status_code=201)
 def create_diagnosis(payload: DiagnosisRequest, db: Session = Depends(get_db)):
     engineer = db.query(Engineer).filter(Engineer.id == str(payload.engineer_id)).first()
     if not engineer:

@@ -12,7 +12,7 @@ from ..services.discord_notifier import notifier
 router = APIRouter(prefix="/companies", tags=["companies"])
 
 
-@router.post("/", response_model=CompanyResponse, status_code=201)
+@router.post("", response_model=CompanyResponse, status_code=201)
 async def create_company(payload: CompanyCreate, db: Session = Depends(get_db)):
     company = Company(
         name=payload.name,
@@ -39,7 +39,7 @@ async def create_company(payload: CompanyCreate, db: Session = Depends(get_db)):
     return company
 
 
-@router.get("/", response_model=list[CompanyResponse])
+@router.get("", response_model=list[CompanyResponse])
 def list_companies(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
     return db.query(Company).order_by(Company.created_at.desc()).offset(skip).limit(limit).all()
 
